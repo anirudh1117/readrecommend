@@ -17,7 +17,7 @@ class Celebrity(models.Model):
     name = models.CharField(max_length=100,blank=False)
     description = models.TextField()
     professions = models.ManyToManyField('Profession')
-    image = models.FileField(upload_to='photos/%Y/%m/%d/', blank=True)
+    image = models.FileField(upload_to=get_upload_path, blank=True)
 
 
     def __str__(self):
