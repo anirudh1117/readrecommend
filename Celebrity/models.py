@@ -5,6 +5,13 @@ class Profession(models.Model):
 
     def __str__(self):
         return f'{self.name}' 
+    
+    
+ def get_upload_path(instance, filename):
+    field_value = instance.name
+    date_time = timezone.now().strftime('%Y/%m/%d')
+    filename = os.path.basename(filename)
+    return f'{field_value}/{date_time}/{filename}'
 
 class Celebrity(models.Model):
     name = models.CharField(max_length=100,blank=False)
