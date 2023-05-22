@@ -27,11 +27,17 @@ class Books(models.Model):
     def __str__(self):
         return f'{self.name}' 
 
+ 
+def get_upload_path(instance, filename):
+    field_value = instance.book.name
+    date_time = timezone.now().strftime('%Y/%m/%d')
+    filename = os.path.basename(filename)
+    return f'{field_value}/{date_time}/{filename}'
 
 
 class BookImages(models.Model):
     book = models.ForeignKey( "Books", on_delete=models.CASCADE)
-    image = models.FileField(upload_to='photos/%Y/%m/%d/', blank=True)
+    image = models.FileField(upload_to=get_upload_path, blank=True)
 
 # class Rating(models.Model):
 #     name = models.CharField(max_length=100,blank=False)
