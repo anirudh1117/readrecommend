@@ -15,36 +15,6 @@ def categories(request):
 def series(request):
     return render(request, 'series.html')
 
-def people(request):
-    peoples = Celebrity.objects.all()
-
-    data={
-        "peoples":peoples,
-    }
-    print(data)
-    return render(request, 'people.html',data)
-
-def peopleDetail(request,name):
-    
-   cs=Celebrity.objects.filter(name=name)
-#    cs_id= cs.values_list('pk', flat=True)[0]
-
-   
-
-   bookrecoms= Recommend.objects.filter(Celebrity=cs[0])
-   print(bookrecoms)
-
-   data={
-    "cs":cs,
-    "bookrecoms": bookrecoms
-   }
-
-   
-  
-
-   return render(request, 'peopleDetail.html',data)
-
-
 def contact(request):
     return render(request, 'contact.html')
 
