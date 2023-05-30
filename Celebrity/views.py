@@ -16,16 +16,20 @@ def people(request):
         "peoples":peoples,
         'professions' : profession_list,
     }
-    print(peoples)
+    print(peoples[2].image)
     return render(request, 'people.html',data)
 
 def peopleDetail(request,name):
     
    cs=Celebrity.objects.filter(name_slug__iexact=name)
+   if cs.first():
+       cs = cs[0]
+       
 #    cs_id= cs.values_list('pk', flat=True)[0]
-   bookrecoms= Recommend.objects.filter(Celebrity=cs[0])
+   bookrecoms= Recommend.objects.filter(Celebrity=cs)
+   print(bookrecoms[0].book.bookimages_set.all())
    data={
-    "cs":cs,
+    "people":cs,
     "bookrecoms": bookrecoms
    }
 

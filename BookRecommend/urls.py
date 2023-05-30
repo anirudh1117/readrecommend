@@ -7,4 +7,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
      path('', include('Books.urls')),
      path('people/', include('Celebrity.urls')),
-]
+]+ static(settings.MEDIA_URL,document_root= settings.MEDIA_ROOT)

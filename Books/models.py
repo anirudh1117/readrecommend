@@ -74,7 +74,7 @@ def get_upload_path(instance, filename):
     field_value = instance.book.name
     # date_time = timezone.now().strftime('%Y/%m/%d')
     filename = os.path.basename(filename)
-    return f'photos/Books/{field_value}/{filename}'
+    return f'media/Books/{field_value}/{filename}'
 
 
 class BookImages(models.Model):

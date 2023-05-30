@@ -25,7 +25,7 @@ def get_upload_path(instance, filename):
     field_value = instance.name
     
     filename = os.path.basename(filename)
-    return f'photos/Celebrity/{field_value}/{filename}'
+    return f'media/Celebrity/{field_value}/{filename}'
 
 class Celebrity(models.Model):
     name = models.CharField(max_length=100,blank=False)
@@ -49,6 +49,7 @@ PLATFORM_CHOICES = (
     ("INSTAGRAM", "INSTAGRAM"),
     ("TWITTER", "TWITTER"),
     ("FACEBOOK", "FACEBOOK"),
+    ("LINKEDIN", "LINKEDIN")
 )
 
 class SocialPlatform(models.Model):
