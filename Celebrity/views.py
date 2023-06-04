@@ -27,7 +27,6 @@ def peopleDetail(request,name):
        
 #    cs_id= cs.values_list('pk', flat=True)[0]
    bookrecoms= Recommend.objects.filter(Celebrity=cs)
-   print(bookrecoms[0].book.bookimages_set.all())
    data={
     "people":cs,
     "bookrecoms": bookrecoms

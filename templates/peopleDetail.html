@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
-
+{% block title %}Books Recommended by {{people.name}}{% endblock %}
+{% block extra_head %}
+<meta name="description" property="og:description" content="This page shows Books recommended by {} and books card contains images, description and Amazon link.".format({{people.name}})>
+<meta name="keywords" content="books, amazon, recommend, {}".format({{people.name}})>
+{% endblock %}
 {% block content %}
 {% load static %}
-
 <section class="bg-blue-200 dark:bg-gray-900">
     <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
 
