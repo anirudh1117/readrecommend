@@ -10,5 +10,5 @@ urlpatterns = [
     path('about', views.about, name='about'),
    
     path('contact', views.contact, name='contact'),
-
+    path('api/subcategories/<str:category_id>', views.get_sub_category, name='subcategory_api'),
 ] 

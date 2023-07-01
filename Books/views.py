@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.db.models import Count
 from .models import SubCategory, Categories,BookImages,Books
 from Celebrity.models import Profession,SocialPlatform,Celebrity
 from Recommend.models import Recommend
@@ -6,7 +8,12 @@ from Recommend.models import Recommend
 
 
 def home(request):
-    return render(request, 'home.html')
+    peoples = Celebrity.objects.annotate(count=Count('celebritys')).order_by('-count')[:4]
+    data={
+        "peoples":peoples,
+    }
+    print(peoples)
+    return render(request, 'home.html', data)
 
 
 def categories(request):
@@ -23,6 +30,16 @@ def about(request):
 
 def gift(request):
     return render(request, 'gift.html')
+
+def get_sub_category(request, category_id):
+    category_id = [] if category_id == "null" else category_id.split(",")
+    subcategories = SubCategory.objects.filter(Category_id__in=category_id).distinct()
+    response_data = [
+        {'id': subcategory.id, 'name': subcategory.name}
+        for subcategory in subcategories
+    ]
+
+    return JsonResponse(response_data, safe=False)
 
 
 

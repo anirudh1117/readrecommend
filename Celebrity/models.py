@@ -16,7 +16,7 @@ class Profession(models.Model):
         if self.name:
             self.name_slug = slugify(self.name.upper())
             professionObj = Profession.objects.filter(name_slug=self.name_slug)
-            if professionObj.first():
+            if self.pk is None and professionObj.first():
                 raise ValidationError({"detail" : "This Profession is already created"})
         super().save(*args, **kwargs)
     
@@ -28,7 +28,7 @@ def get_upload_path(instance, filename):
     return f'media/Celebrity/{field_value}/{filename}'
 
 class Celebrity(models.Model):
-    name = models.CharField(max_length=100,blank=False)
+    name = models.CharField(max_length=100,blank=False, unique=True)
     name_slug = models.SlugField(blank=True, null=True, editable=False)
     description = models.TextField(blank=True, null=True)
     professions = models.ManyToManyField('Profession')
@@ -41,6 +41,8 @@ class Celebrity(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.name_slug = slugify(self.name.upper())
+        if self.pk is None and Celebrity.objects.filter(name_slug=self.name_slug).exists():
+            raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
 
 

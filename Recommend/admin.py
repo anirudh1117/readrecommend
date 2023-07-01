@@ -15,3 +15,4 @@ class RecommendationInline(admin.TabularInline):
     model = Recommend
     formset = RecommendationFormSet
     extra = 1
+    autocomplete_fields = ['Celebrity']

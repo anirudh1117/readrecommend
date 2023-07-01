@@ -40,7 +40,7 @@
                     alt="Bonnie Avatar">
                 {% endif %}
                 <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a href="{% url 'people-detail' people.name_slug %}">{{people.name}}</a>
+                    <a href="{% url 'people-detail' people.name_slug %}">{{people.name|lower|title }}</a>
                 </h3>
                 <p>
                     {{people.professions.all | join:", " }}

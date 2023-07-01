@@ -1,10 +1,10 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 import os
-from datetime import timezone
+from django.core.exceptions import ValidationError
 from utils.common_function import slugify
+from Celebrity.models import Celebrity
 
-class SubCategory(models.Model):
+class Categories(models.Model):
     name = models.CharField(max_length=100,blank=False)
     name_slug = models.SlugField(blank=True, null=True, editable=False)
 
@@ -14,12 +14,14 @@ class SubCategory(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.name_slug = slugify(self.name.upper())
+        if self.pk is None and Categories.objects.filter(name_slug=self.name_slug).exists():
+            raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
 
-class Categories(models.Model):
+class SubCategory(models.Model):
     name = models.CharField(max_length=100,blank=False)
-    SubCategories = models.ManyToManyField('SubCategory', blank=True)
     name_slug = models.SlugField(blank=True, null=True, editable=False)
+    Category = models.ForeignKey(Categories, blank=True, null=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f'{self.name}' 
@@ -31,12 +33,13 @@ class Categories(models.Model):
 
 
 class Series(models.Model):
-    name = models.CharField(max_length=100,blank=False)
+    name = models.CharField(max_length=100,blank=True)
     name_slug = models.SlugField(blank=True, null=True, editable=False)
-    title = models.CharField(max_length=256,blank=False)
-    authorName = models.CharField(max_length=100,blank=False)
+    title = models.CharField(max_length=256,blank=True)
+    author_name = models.ForeignKey(Celebrity, null=True, on_delete=models.DO_NOTHING)
     description = models.TextField(null=True, blank=True)
     categories = models.ManyToManyField('Categories', blank=True)
+    sub_categories = models.ManyToManyField('SubCategory', blank=True)
     ISBN = models.CharField(max_length=100,blank=True)
 
 
@@ -46,6 +49,8 @@ class Series(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.name_slug = slugify(self.name.upper())
+        if self.pk is None and Series.objects.filter(name_slug=self.name_slug).exists():
+            raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
 
 
@@ -53,10 +58,11 @@ class Books(models.Model):
     name = models.CharField(max_length=100,blank=False)
     name_slug = models.SlugField(blank=True, null=True, editable=False)
     title = models.CharField(max_length=256,blank=False)
-    authorName = models.CharField(max_length=100,blank=False)
+    author_name = models.ForeignKey(Celebrity, null=True, on_delete=models.DO_NOTHING)
     description = models.TextField(null=True, blank=True)
     series = models.ForeignKey(Series, on_delete=models.CASCADE, null=True, blank=True)
     categories = models.ManyToManyField('Categories', blank=True)
+    sub_categories = models.ManyToManyField('SubCategory', blank=True)
     ISBN = models.CharField(max_length=100,blank=True)
     amazonlink = models.URLField(default='https://amzn.to/3MquoAM')
     dateOfPublish = models.DateField(null=True)
@@ -67,6 +73,8 @@ class Books(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.name_slug = slugify(self.name.upper())
+        if self.pk is None and Books.objects.filter(name_slug=self.name_slug).exists():
+            raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
 
  

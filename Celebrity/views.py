@@ -8,7 +8,8 @@ from Recommend.models import Recommend
 def people(request):
     filter = request.GET.get('filter', None)
     if filter is None or len(filter) == 0:
-        peoples = Celebrity.objects.annotate(count=Count('celebritys'))
+        celebrity_ids = Recommend.objects.values_list("Celebrity_id").distinct()
+        peoples = Celebrity.objects.filter(id__in =celebrity_ids).annotate(count=Count('celebritys'))
     else:
         peoples = Celebrity.objects.filter(professions__name_slug__iexact = filter).annotate(count=Count('celebritys'))
     profession_list = Profession.objects.all()
@@ -16,7 +17,6 @@ def people(request):
         "peoples":peoples,
         'professions' : profession_list,
     }
-    print(peoples[2].image)
     return render(request, 'people.html',data)
 
 def peopleDetail(request,name):
