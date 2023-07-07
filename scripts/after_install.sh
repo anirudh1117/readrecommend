@@ -7,7 +7,7 @@ sudo pkill -f runserver
 # sudo pkill -f tailwind
 # sudo pkill -f node
 
-cd /home/ubuntu/django-aws_cicd/
+cd /home/ubuntu/django-read-recommend/
 
 # activate virtual environment
 python3 -m venv venv
