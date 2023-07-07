@@ -17924,7 +17924,7 @@
         "pk": 200,
         "fields": {
             "book": 88,
-            "Celebrity": 66,
+            "Celebrity": 114,
             "celebrity_comment": ""
         }
     },
@@ -18185,7 +18185,7 @@
         "pk": 229,
         "fields": {
             "book": 92,
-            "Celebrity": 66,
+            "Celebrity": 114,
             "celebrity_comment": ""
         }
     },
@@ -18878,7 +18878,7 @@
         "pk": 306,
         "fields": {
             "book": 123,
-            "Celebrity": 66,
+            "Celebrity": 114,
             "celebrity_comment": ""
         }
     },
@@ -19067,7 +19067,7 @@
         "pk": 327,
         "fields": {
             "book": 133,
-            "Celebrity": 66,
+            "Celebrity": 114,
             "celebrity_comment": ""
         }
     },
