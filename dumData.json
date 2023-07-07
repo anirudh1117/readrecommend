@@ -9393,19 +9393,6 @@
     },
     {
         "model": "Celebrity.celebrity",
-        "pk": 104,
-        "fields": {
-            "name": "Melinda Gates",
-            "name_slug": "melinda-gates",
-            "description": "Melinda French Gates is an American philanthropist, former multimedia product developer and manager at Microsoft, and the ex-wife of its co-founder and billionaire Bill Gates. French Gates has consistently been ranked as one of the world's most powerful women by Forbes magazine.",
-            "image": "",
-            "professions": [
-                22
-            ]
-        }
-    },
-    {
-        "model": "Celebrity.celebrity",
         "pk": 105,
         "fields": {
             "name": "Melinda Gates",
