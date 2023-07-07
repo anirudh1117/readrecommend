@@ -13,8 +13,11 @@ cd /home/ubuntu/django-read-recommend/
 python3 -m venv venv
 source venv/bin/activate
 
-install requirements.txt
-pip install -r /home/ubuntu/django-read-recommend/readrecommend/readrecommend/requirements.txt
+#install requirements.txt
+cd /home/ubuntu/django-read-recommend/readrecommend/readrecommend
+pip install -r requirements.txt
+python manage.py  makemigrations
+python manage.py migrate
 
 # run server
 screen -d -m python3 manage.py runserver 0:8000
