@@ -16799,7 +16799,7 @@
         "pk": 75,
         "fields": {
             "book": 44,
-            "Celebrity": 104,
+            "Celebrity": 105,
             "celebrity_comment": ""
         }
     },
@@ -19769,7 +19769,7 @@
         "pk": 405,
         "fields": {
             "book": 180,
-            "Celebrity": 104,
+            "Celebrity": 105,
             "celebrity_comment": ""
         }
     },
