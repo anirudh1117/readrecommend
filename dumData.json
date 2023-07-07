@@ -15151,7 +15151,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 209,
         "fields": {
-            "Celebrity": 104,
+            "Celebrity": 105,
             "name": "TWITTER",
             "link": "https://twitter.com/melindagates"
         }
@@ -15160,7 +15160,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 210,
         "fields": {
-            "Celebrity": 104,
+            "Celebrity": 105,
             "name": "INSTAGRAM",
             "link": "https://www.instagram.com/melindafrenchgates/"
         }
@@ -15169,7 +15169,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 211,
         "fields": {
-            "Celebrity": 104,
+            "Celebrity": 105,
             "name": "LINKEDIN",
             "link": "https://www.linkedin.com/in/melindagates/"
         }
@@ -15178,7 +15178,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 212,
         "fields": {
-            "Celebrity": 104,
+            "Celebrity": 105,
             "name": "FACEBOOK",
             "link": "https://www.facebook.com/melindagates"
         }
