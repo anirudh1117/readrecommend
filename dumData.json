@@ -14368,7 +14368,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 122,
         "fields": {
-            "Celebrity": 66,
+            "Celebrity": 114,
             "name": "LINKEDIN",
             "link": "https://www.linkedin.com/in/lexfridman/"
         }
@@ -14377,7 +14377,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 123,
         "fields": {
-            "Celebrity": 66,
+            "Celebrity": 114,
             "name": "TWITTER",
             "link": "https://twitter.com/lexfridman"
         }
@@ -14386,7 +14386,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 124,
         "fields": {
-            "Celebrity": 66,
+            "Celebrity": 114,
             "name": "INSTAGRAM",
             "link": "https://www.instagram.com/lexfridman/"
         }
@@ -14467,7 +14467,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 133,
         "fields": {
-            "Celebrity": 76,
+            "Celebrity": 27,
             "name": "LINKEDIN",
             "link": "https://www.linkedin.com/in/satyanadella/"
         }
@@ -14476,7 +14476,7 @@
         "model": "Celebrity.socialplatform",
         "pk": 134,
         "fields": {
-            "Celebrity": 76,
+            "Celebrity": 27,
             "name": "TWITTER",
             "link": "https://twitter.com/satyanadella"
         }
