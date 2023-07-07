@@ -9042,19 +9042,6 @@
     },
     {
         "model": "Celebrity.celebrity",
-        "pk": 76,
-        "fields": {
-            "name": "Satya Nadella",
-            "name_slug": "satya-nadella",
-            "description": "Satya Narayana Nadella is an Indian-American business executive. He is the executive chairman and CEO of Microsoft, succeeding Steve Ballmer in 2014 as CEO and John W. Thompson in 2021 as chairman.",
-            "image": "media/Celebrity/Satya Nadella/Satya_Narayana_OEBIyf1.webp",
-            "professions": [
-                1
-            ]
-        }
-    },
-    {
-        "model": "Celebrity.celebrity",
         "pk": 77,
         "fields": {
             "name": "Sam Bankman-Fried",
