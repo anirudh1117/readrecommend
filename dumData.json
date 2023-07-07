@@ -8912,19 +8912,6 @@
     },
     {
         "model": "Celebrity.celebrity",
-        "pk": 66,
-        "fields": {
-            "name": "Lex Fridman",
-            "name_slug": "lex-fridman",
-            "description": "Lex Fridman is a research scientist at MIT and the host of the popular Lex Fridman Podcast. He is a graduate of the Massachusetts Institute of Technology (MIT) and holds a PhD in Robotics from the university. Fridman's research interests include artificial intelligence, machine learning, and computer vision. He has published over 20 papers in top academic conferences and journals.",
-            "image": "media/Celebrity/Lex Fridman/Lex_Fridman.jpg",
-            "professions": [
-                14
-            ]
-        }
-    },
-    {
-        "model": "Celebrity.celebrity",
         "pk": 67,
         "fields": {
             "name": "Lewis Cantley",
