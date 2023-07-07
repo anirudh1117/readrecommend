@@ -9510,19 +9510,6 @@
     },
     {
         "model": "Celebrity.celebrity",
-        "pk": 115,
-        "fields": {
-            "name": "LARRY ELLISON",
-            "name_slug": "larry-ellison",
-            "description": "Lawrence Joseph Ellison is an American business magnate and investor. He is the co-founder, executive chairman, chief technology officer, and former chief executive officer of the American computer technology company Oracle Corporation.",
-            "image": "media/Celebrity/LARRY ELLISON/LARRY_ELLISON.jpeg",
-            "professions": [
-                4
-            ]
-        }
-    },
-    {
-        "model": "Celebrity.celebrity",
         "pk": 116,
         "fields": {
             "name": "KANYE WEST",
