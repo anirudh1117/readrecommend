@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/django-read-recommend/readrecommend/readrecommend
+    destination: /home/ubuntu/read-recommend/readrecommend/
 hooks:
   BeforeInstall:
       - location: scripts/before_install.sh

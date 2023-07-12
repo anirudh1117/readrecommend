@@ -7,14 +7,14 @@ sudo pkill -f runserver
 # sudo pkill -f tailwind
 # sudo pkill -f node
 
-cd /home/ubuntu/django-read-recommend/
+cd /home/ubuntu/read-recommend/
 
 # activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
 #install requirements.txt
-cd /home/ubuntu/django-read-recommend/readrecommend/readrecommend
+cd /home/ubuntu/read-recommend/readrecommend/
 pip install -r requirements.txt
 python manage.py  makemigrations
 python manage.py migrate
