@@ -18,4 +18,5 @@ sudo apt-get install -y python3 python3-dev python3-pip python3-venv
 pip install --user --upgrade virtualenv
 
 # delete app
-sudo rm -rf /home/ubuntu/read-recommend/readrecommend
+cd /home/ubuntu/read-recommend/readrecommend
+sudo rm -rf BookRecommend Books Celebrity Recommend scripts static templates utils manage.py requirements.txt

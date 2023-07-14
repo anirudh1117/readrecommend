@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.shortcuts import reverse
 import os
 from datetime import timezone
 
@@ -44,6 +45,10 @@ class Celebrity(models.Model):
         if self.pk is None and Celebrity.objects.filter(name_slug=self.name_slug).exists():
             raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        path = reverse('people-detail', args=[self.name_slug])
+        return str(path)
 
 
 

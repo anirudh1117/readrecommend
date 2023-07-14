@@ -14,10 +14,12 @@ python3 -m venv venv
 source venv/bin/activate
 
 #install requirements.txt
-cd /home/ubuntu/read-recommend/readrecommend/
+cd /home/ubuntu/read-recommend/readrecommend
 pip install -r requirements.txt
+pip install gunicorn
 python manage.py  makemigrations
 python manage.py migrate
 
 # run server
-screen -d -m python3 manage.py runserver 0:8000
+#screen -d -m python3 manage.py runserver 0:8000
+sudo service apache2 restart
