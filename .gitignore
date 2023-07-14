@@ -1,0 +1,7 @@
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+.env
+media.zip
+db.sqlite3
+dumData.json
