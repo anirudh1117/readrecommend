@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Count
+from django.http import JsonResponse
 
 from .models import Celebrity, Profession
 from Recommend.models import Recommend
@@ -33,3 +34,13 @@ def peopleDetail(request,name):
    }
 
    return render(request, 'peopleDetail.html',data)
+
+def peopleSearch(request, name):
+    data=Celebrity.objects.filter(name__icontains=name).values('name', 'name_slug')
+    for celeb in data:
+        print(celeb)
+    response_data = [
+        {'name': celeb.get('name'), 'name_slug' : celeb.get('name_slug') }
+        for celeb in data
+    ]
+    return JsonResponse(response_data, safe=False)
