@@ -5,14 +5,20 @@
 <link href="{% static '/css/card.css' %}" rel="stylesheet" />
 <script src="{% static 'js/card.js' %}"></script>
 <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
-
+<style>
+    img{
+        height: auto;
+    /* max-width: 100%; */
+    width: 130px !important;
+    }
+</style>
 <meta name="description" property="og:description"
     content="This page shows Books recommended by {} and books card contains images, description and Amazon link."
     .format({{people.name}})>
 <meta name="keywords" content="books, amazon, recommend, {}" .format({{people.name}})>
 {% endblock %}
 {% block content %}
-<section class="bg-blue-200 dark:bg-gray-900">
+<section class="bg-purple-50 dark:bg-gray-900">
     <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
 
         {% if people.image %}
