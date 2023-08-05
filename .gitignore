@@ -5,5 +5,5 @@
 media.zip
 db.sqlite3
 dumData.json
-media
-myworld
+**/media/**
+**/myworld/**
