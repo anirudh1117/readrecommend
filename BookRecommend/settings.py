@@ -81,6 +81,16 @@ WSGI_APPLICATION = 'BookRecommend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#       'ENGINE': 'django.db.backends.mysql',
+#       'NAME': config('DB_NAME'),
+#       'USER': config('DB_USERNAME'),
+#       'PASSWORD': config('DB_PASSWORD'),
+#       'HOST': '127.0.0.1',
+#   }
+#
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
