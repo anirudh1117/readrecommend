@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 import os
 from django.core.exceptions import ValidationError
 from utils.common_function import slugify
@@ -76,6 +77,10 @@ class Books(models.Model):
         if self.pk is None and Books.objects.filter(name_slug=self.name_slug).exists():
             raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        path = reverse('book-detail', args=[self.name_slug])
+        return str(path)
 
  
 def get_upload_path(instance, filename):
@@ -96,5 +101,15 @@ class BookImages(models.Model):
 
 #     def __str__(self):
 #         return f'{self.name}' 
+
+
+class ContactForm(models.Model):
+    name = models.CharField(max_length=100,blank=False)
+    email = models.CharField(max_length=100,blank=False)
+    subject = models.CharField(max_length=100,blank=False)
+    message = models.TextField(max_length=500,blank=False)
+
+    def __str__(self):
+        return f'{self.name}' 
 
 

@@ -1,132 +1,195 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Books Recommended by {{people.name}}{% endblock %}
+{% block title %}Read Recommend: Books Recommended by {{people.name}}{% endblock %}
 {% block extra_head %}
-<link href="{% static '/css/card.css' %}" rel="stylesheet" />
-<script src="{% static 'js/card.js' %}"></script>
-<script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-<meta name="description" property="og:description"
-    content="{{description}}">
+<link rel="icon" type="image/png" href="/static/img/favicon.ico">
+<link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="{% static 'lib/wow/wow.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'lib/easing/easing.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+<!-- Template Javascript -->
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
+
+<meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
 {% endblock %}
 {% block content %}
-<section class="bg-blue-200 dark:bg-gray-900">
-    <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
 
-        {% if people.image %}
-        <img class="mx-auto mb-4 w-36 h-36 rounded-full" src="{{people.image.url}}" alt="{{people.name}}">
-        {% else %}
-        <img class="mx-auto mb-4 w-36 h-36 rounded-full"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="{{people.name}}">
-        {% endif %}
-        <h1
-            class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            {{people.name|lower|title}}</h1>
-        <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
-            {{people.description}}</p>
-        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+<!-- Spinner Start -->
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
 
-
-            <ul class="flex space-x-4 sm:mt-0">
-                {% for socialplatform in people.socialplatform_set.all %}
-
-                {% if socialplatform.name == 'FACEBOOK' %}
-                <li>
-                    <a href="{{socialplatform.link}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-3 7h-1.924c-.615 0-1.076.252-1.076.889v1.111h3l-.238 3h-2.762v8h-3v-8h-2v-3h2v-1.923c0-2.022 1.064-3.077 3.461-3.077h2.539v3z" />
-                        </svg>
-                    </a>
-                </li>
-                {% endif %}
-
-                {% if socialplatform.name == 'TWITTER' %}
-                <li>
-                    <a href="{{socialplatform.link}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-.139 9.237c.209 4.617-3.234 9.765-9.33 9.765-1.854 0-3.579-.543-5.032-1.475 1.742.205 3.48-.278 4.86-1.359-1.437-.027-2.649-.976-3.066-2.28.515.098 1.021.069 1.482-.056-1.579-.317-2.668-1.739-2.633-3.26.442.246.949.394 1.486.411-1.461-.977-1.875-2.907-1.016-4.383 1.619 1.986 4.038 3.293 6.766 3.43-.479-2.053 1.08-4.03 3.199-4.03.943 0 1.797.398 2.395 1.037.748-.147 1.451-.42 2.086-.796-.246.767-.766 1.41-1.443 1.816.664-.08 1.297-.256 1.885-.517-.439.656-.996 1.234-1.639 1.697z" />
-                        </svg>
-                    </a>
-                </li>
-                {% endif %}
-
-                {% if socialplatform.name == 'LINKEDIN' %}
-                <li>
-                    <a href="{{socialplatform.link}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                        </svg>
-                    </a>
-                </li>
-                {% endif %}
-
-                {% if socialplatform.name == 'INSTAGRAM' %}
-                <li>
-                    <a href="{{socialplatform.link}}" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                                d="M15.233 5.488c-.843-.038-1.097-.046-3.233-.046s-2.389.008-3.232.046c-2.17.099-3.181 1.127-3.279 3.279-.039.844-.048 1.097-.048 3.233s.009 2.389.047 3.233c.099 2.148 1.106 3.18 3.279 3.279.843.038 1.097.047 3.233.047 2.137 0 2.39-.008 3.233-.046 2.17-.099 3.18-1.129 3.279-3.279.038-.844.046-1.097.046-3.233s-.008-2.389-.046-3.232c-.099-2.153-1.111-3.182-3.279-3.281zm-3.233 10.62c-2.269 0-4.108-1.839-4.108-4.108 0-2.269 1.84-4.108 4.108-4.108s4.108 1.839 4.108 4.108c0 2.269-1.839 4.108-4.108 4.108zm4.271-7.418c-.53 0-.96-.43-.96-.96s.43-.96.96-.96.96.43.96.96-.43.96-.96.96zm-1.604 3.31c0 1.473-1.194 2.667-2.667 2.667s-2.667-1.194-2.667-2.667c0-1.473 1.194-2.667 2.667-2.667s2.667 1.194 2.667 2.667zm4.333-12h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm.952 15.298c-.132 2.909-1.751 4.521-4.653 4.654-.854.039-1.126.048-3.299.048s-2.444-.009-3.298-.048c-2.908-.133-4.52-1.748-4.654-4.654-.039-.853-.048-1.125-.048-3.298 0-2.172.009-2.445.048-3.298.134-2.908 1.748-4.521 4.654-4.653.854-.04 1.125-.049 3.298-.049s2.445.009 3.299.048c2.908.133 4.523 1.751 4.653 4.653.039.854.048 1.127.048 3.299 0 2.173-.009 2.445-.048 3.298z" />
-                        </svg>
-                    </a>
-                </li>
-                {% endif %}
-
-                {% endfor %}
-            </ul>
+<!-- Header Start -->
+<div class="container-fluid header bg-white p-0">
+    <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
+        <div class="col-md-6 p-5 mt-lg-5">
+            <h1 class="display-5 animated fadeIn mb-4">{{people.name | lower | title}}</h1>
+            <nav aria-label="breadcrumb animated fadeIn">
+                <ol class="breadcrumb text-uppercase">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'people' %}">People</a></li>
+                    <li class="breadcrumb-item text-body active" aria-current="page">{{people.name}}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-6 animated fadeIn">
+            <img class="img-fluid" src="https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg"
+                alt="read-recommend cover image">
         </div>
     </div>
-</section>
-<h1 class="py-4 text-center text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-    Books Recommended by {{people.name|lower|title}}
-</h1>
+</div>
+<!-- Header End -->
 
-<section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
+<!-- Call to Action Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="bg-light rounded p-3">
+            <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
+                        <img class="img-fluid rounded w-100" src="{{people.image.url}}" alt="{{people.name}}"
+                            style="width: 300px !important; height: 280px !important;">
+                    </div>
+                    <div class="col-lg-8 wow fadeIn" data-wow-delay="0.5s">
+                        <h3 class="mb-3">{{people.name|lower|title}} Book Recommendations</h3>
+                        <div class="mb-4">
+                            <div class="row py-0">
+                                <small class="col-lg-3">
+                                    <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                                    {{people.professions.all |join:", " }}
+                                </small>
+                            </div>
+                            <div class="row py-3">
+                                <small class="col-lg-3">
+                                    <i class="bi bi-journal-bookmark-fill text-primary me-2"></i>
+                                    {{bookrecoms |length }} Books
+                                </small>
+                            </div>
 
-        <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
-            {% for bookrecom in bookrecoms %}
-            <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-                <a href="#">
-                    {% if bookrecom.book.bookimages_set.all %}
-                    {% for bookimage in bookrecom.book.bookimages_set.all|slice:":1" %}
-                    <img class="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="{{bookimage.image.url}}"
-                        alt="{{ bookrecom.book.name }}">
-                    {% endfor %}
-                    {% else %}
-                    <img class="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
-                        alt="{{ bookrecom.name }}">
-                    {% endif %}
-                </a>
-                <div class="p-5">
-                    <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        <a href="#">{{bookrecom.book.name|lower|title}}</a>
-                    </h3>
-                    <span class="text-gray-500 dark:text-gray-400">{{bookrecom.book.categories.all | join:", " }}</span>
-                    <p class="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400" id="book-description">{{bookrecom.book.description|truncatewords:50 }} see more</p>
-                    <ul class="flex space-x-4 sm:mt-0">
-                        <li>
-                            <a href="{{bookrecom.book.amazonlink}}"
-                                class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                                <button type="button"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">View
-                                    On Amazon</button>
-                            </a>
-                        </li>
-                    </ul>
+                            <p>{{people.description |truncatewords:50}}</p>
+                        </div>
+                        <a onclick="window.open('{{wikipedia}}')" class="btn btn-outline-dark py-2 px-2">Wikipedia</a>
+                    </div>
                 </div>
             </div>
-
-            {% endfor %}
-
-
-
         </div>
     </div>
-</section>
+</div>
+<!-- Call to Action End -->
+
+<div class="container-xxl py-5">
+    <div class="row g-0 justify-content-center flex-column-reverse flex-md-row">
+        <div class="col-md-4 animated fadeIn">
+            <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s"">
+                <div class=" wow fadeInRight animated">
+                <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                    <h3 class="mb-3">You may also like</h3>
+                    <p>Celebrities from similar Professions</p>
+
+                    {% for celebrity in recommendedCelebrity %}
+                    <div class="py-3">
+                        <a href="{% url 'author-detail' celebrity.name_slug %}">
+                            <div class="d-flex align-items-center">
+                                {% if celebrity.image %}
+                                <img class="img-fluid flex-shrink-0 rounded" src="{{celebrity.image.url}}"
+                                    style="width: 45px; height: 45px;" alt="{{celebrity.name_slug}} Avtar">
+                                    {% endif %}
+                                <div class="ps-3">
+                                    <h6 class="fw-bold mb-1">{{ celebrity.name|lower|title}}</h6>
+                                    <small>{{ celebrity.count }} Books Recommended</small>
+                                </div>
+
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 animated fadeIn">
+        <div class="row g-3">
+            {% for bookrecom in books %}
+            <div class="col-lg-4 col-md-6 wow fadeInUp book-card" data-wow-delay="0.1s">
+                <div class="property-item rounded overflow-hidden">
+                    <div class="position-relative overflow-hidden">
+                        <div class="text-center">
+                            {% for bookimage in bookrecom.bookimages_set.all|slice:":1" %}
+                            <a href="{{bookrecom.amazonlink}}" target="_blank"><img class="img-fluid" src="{{bookimage.image.url}}" alt="{{ bookrecom.name }}"
+                                    style="padding-top: 10px; border-radius: 10px; width: 350px; height: 400px;"></a>
+                            {% endfor %}
+                        </div>
+
+                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                            {{ bookrecom.count }} recommendations</div>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <a class="d-block h5 mb-3 text-center" href="">{{bookrecom.name|lower|title}}</a>
+                        <p class="text-center py-2">
+                            {% if bookrecom.categories.all %}
+                            <i class="fa fa-map-marker-alt text-primary me-2">
+                            </i>
+                            {{bookrecom.categories.all |join:", " }}
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'author-detail' bookrecom.author_name.name_slug %}" class="text-center">
+                            <div class="d-flex align-items-center">
+                                {% if bookrecom.author_name.image %}
+                                <img class="img-fluid flex-shrink-0 rounded" src="{{bookrecom.author_name.image.url}}"
+                                    style="width: 45px; height: 45px;"
+                                    alt="{{bookrecom.book.author_name.name_slug}} Avtar">
+                                {% endif %}
+                                <div class="ps-3">
+                                    <h6 class="fw-bold mb-1">{{ bookrecom.author_name.name|lower|title}}</h6>
+                                    <small>{{ bookrecom.author_name.professions.all |join:", "}}</small>
+                                </div>
+
+                            </div>
+                        </a>
+                    </div>
+                    <div class="d-flex py-3">
+                        <small class="flex-fill text-center py-2">
+                            <a class="btn btn-outline-dark"
+                            href="{% url 'book-detail' bookrecom.name_slug %}">View Details</a>
+                        </small>
+
+                        <small class="flex-fill text-center py-2">
+                            <a class="btn btn-outline-primary active" data-bs-toggle="pill" style="color: white;"
+                                href="{{bookrecom.amazonlink}}" onclick="window.open('{{book.amazonlink}}')">View
+                                on
+                                Amazon</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 {% endblock %}

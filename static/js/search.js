@@ -22,7 +22,8 @@ let suggestions = [
 {
   (function () {
     document.addEventListener("DOMContentLoaded", function () {
-      const searchInput = document.querySelector(".searchInput");
+      console.log("here")
+      const searchInput = document.getElementById("searchInput");
       const input = searchInput.querySelector("input");
       const resultBox = searchInput.querySelector(".resultBox");
       const icon = searchInput.querySelector(".icon");
@@ -63,6 +64,7 @@ let suggestions = [
       }
 
       function showSuggestions(list, inputBox) {
+        console.log(list, inputBox,"--");
         let listData;
         if (!list.length) {
           userValue = inputBox.value;
