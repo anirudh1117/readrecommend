@@ -69,7 +69,8 @@ class authorSitemap(Sitemap):
         profession = ",".join(str(msg.name) for msg in obj.professions.all())
         return profession
     def location(self,obj):
-        return '/people/%s-written-books' % (obj.name_slug)
+        path = reverse('author-detail', args=[obj.name_slug])
+        return str(path)
     
 
 class bookSitemap(Sitemap):

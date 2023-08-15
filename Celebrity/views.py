@@ -4,11 +4,12 @@ from django.db.models.functions import Length
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 import wikipedia
+import json
 
 from .models import Celebrity, Profession
 from Books.models import Books
 from Recommend.models import Recommend
-from utils.common_function import clean_description
+from utils.common_function import clean_description, create_json_for_author_Detail, create_json_for_list_celebrity, create_json_for_readrecommed, create_json_for_celebrity_Detail
 
 
 def people(request):
@@ -41,12 +42,17 @@ def people(request):
             elif socialplatform.name == "INSTAGRAM":
                 social[2] = socialplatform.link
         platform.append(social)
+    json_list = create_json_for_list_celebrity(zip(peoples, platform))
+    json_list["name"] = "Renowned Personalities and Their Recommended Reads: A Curated List"
+    json_list["description"] = "Explore a curated compilation of celebrated individuals and their literary recommendations on our platform. Discover a treasure trove of insightful books endorsed by notable personalities across various domains. "
+    json_website = create_json_for_readrecommed()
     peoples = zip(peoples, platform)
-
     data = {
         "peoples": peoples,
         'professions': profession_list,
-        'keywords': keywords
+        'keywords': keywords,
+        'jsonList' : json_list,
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'people.html', data)
@@ -93,6 +99,8 @@ def peopleDetail(request, name):
         keywords = keywords + ', ' + book.name + ', ' + book.name_slug + ', ' + \
             book.author_name.name + ', ' + book.title + \
             ', ' + clean_description(cs.description)
+    json_detail = create_json_for_celebrity_Detail(cs, platform, books)
+    json_website = create_json_for_readrecommed()
     data = {
         "people": cs,
         "bookrecoms": bookrecoms,
@@ -101,7 +109,10 @@ def peopleDetail(request, name):
         "description": description,
         "platform": platform,
         "wikipedia": wikipedia_page(cs.name),
-        "recommendedCelebrity": recommended_celebrity
+        "recommendedCelebrity": recommended_celebrity,
+        'jsonPeople' : json_detail["celebrity"],
+        'jsonBookList' : json_detail["books"],
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'peopleDetail.html', data)
@@ -179,12 +190,19 @@ def author(request):
             elif socialplatform.name == "INSTAGRAM":
                 social[2] = socialplatform.link
         platform.append(social)
+
+    json_list = create_json_for_list_celebrity(zip(peoples, platform))
+    json_list["name"] = "Discover Amazing Authors: A Curated List"
+    json_list["description"] = "Explore a curated list of authors and their contributions in various fields."
+    json_website = create_json_for_readrecommed()
     peoples = zip(peoples, platform)
 
     data = {
         "peoples": peoples,
         'professions': profession_list,
-        'keywords': keywords
+        'keywords': keywords,
+        'jsonList' : json_list,
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'author.html', data)
@@ -212,6 +230,10 @@ def authorDetail(request, name):
     recommended_celebrity = Celebrity.objects.filter(professions__in=cs.professions.all()).exclude(
         name_slug__iexact=cs.name_slug).annotate(count=Count('books')).order_by('-count')
     recommended_celebrity = recommended_celebrity.filter(count__gt=0)
+
+    json_detail = create_json_for_author_Detail(cs, platform, books)
+    json_website = create_json_for_readrecommed()
+
     if len(recommended_celebrity) > 6:
         recommended_celebrity = recommended_celebrity[:6]
     description = "This page shows Books written by " + cs.name + \
@@ -233,7 +255,10 @@ def authorDetail(request, name):
         "description": description,
         "platform": platform,
         "wikipedia": wikipedia_page(cs.name),
-        "recommendedCelebrity": recommended_celebrity
+        "recommendedCelebrity": recommended_celebrity,
+        'jsonPeople' : json_detail["celebrity"],
+        'jsonBookList' : json_detail["books"],
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'authorDetail.html', data)

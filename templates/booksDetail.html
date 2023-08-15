@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Read Recommend : Book {{book.name}}{% endblock %}
+{% block title %}Book {{book.name}} : Read Recommend{% endblock %}
 {% block extra_head %}
 <link rel="icon" type="image/png" href="/static/img/favicon.ico">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -30,6 +30,16 @@
 
 <meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
+<meta property="og:title" content="Book {{book.name}} : Read Recommend">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
+<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{book.name_slug}}, {{book.author_name.name_slug}} ">
+
+{% load render_json_ld from json_ld %}
+{% render_json_ld jsonWebsite %}
+{% render_json_ld jsonPeopleList %}
+{% render_json_ld jsonBook %}
+
 {% endblock %}
 {% block content %}
 

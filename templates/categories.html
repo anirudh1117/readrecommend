@@ -32,6 +32,9 @@
 <!-- Template Javascript -->
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
+{% load render_json_ld from json_ld %}
+{% render_json_ld jsonWebsite %}
+
 {% endblock %}
 {% block content %}
 

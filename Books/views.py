@@ -8,6 +8,7 @@ import wikipedia
 from .models import SubCategory, Categories, Books, ContactForm
 from Celebrity.models import Celebrity
 from Recommend.models import Recommend
+from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_readrecommed
 # # Create your views here.
 
 
@@ -39,13 +40,16 @@ def home(request):
     for category in categories:
         keywords = keywords + ', ' + \
             category.get('name') + ', ' + category.get('name_slug')
+        
+    json_website = create_json_for_readrecommed()
 
     data = {
         "peoples": peoples,
         "categories": categories,
         "books": books,
         "platform": platform,
-        "keywords": keywords
+        "keywords": keywords,
+        'jsonWebsite' : json_website
     }
     return render(request, 'home.html', data)
 
@@ -54,13 +58,14 @@ def categories(request):
     categories = Categories.objects.annotate(book_count=Count('books')).values(
         'name', 'book_count', 'name_slug').order_by('-book_count')
     keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, twitter, instagram'
+    json_website = create_json_for_readrecommed()
     for category in categories:
-        print(category)
         keywords = keywords + ', ' + \
             category.get('name') + ', ' + category.get('name_slug')
     data = {
         "categories": categories,
-        "keywords": keywords
+        "keywords": keywords,
+        'jsonWebsite' : json_website
     }
     return render(request, 'categories.html', data)
 
@@ -122,6 +127,11 @@ def books(request):
 
     categories_list = Categories.objects.all().order_by(Length('name').asc())
 
+    json_list = create_json_for_list_book(books)
+    json_list["name"] = "Discover Your Next Read: A Curated List"
+    json_list["description"] = "Explore a diverse collection of books from various genres and authors. Discover new stories and expand your reading list."
+    json_website = create_json_for_readrecommed()
+
     keywords = 'book, recommendation, celebrity, author, amazon, best, world'
     for book in books:
         keywords = keywords + ', ' + book.name + ', ' + book.name_slug
@@ -132,7 +142,9 @@ def books(request):
     data = {
         "books": books,
         'keywords': keywords,
-        "categories": categories_list
+        "categories": categories_list,
+        'jsonList' : json_list,
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'books.html', data)
@@ -186,6 +198,10 @@ def bookDetail(request, name):
                 social[2] = socialplatform.link
         platform.append(social)
         keywords = keywords + ', ' + people.name + ', ' + people.name_slug
+
+    json_detail = create_json_for_book_Detail(book, zip(peoples, platform))
+    json_website = create_json_for_readrecommed()
+
     peoples = zip(peoples, platform)
     recomBooks = Books.objects.filter(
         categories__in=book.categories.all()).exclude(id=book.id)
@@ -205,6 +221,9 @@ def bookDetail(request, name):
         "description": description,
         "wikipedia": wikipedia_page(book.name),
         "peoples": peoples,
+        'jsonPeopleList' : json_detail["celebrity"],
+        'jsonBook' : json_detail["book"],
+        'jsonWebsite' : json_website
     }
 
     return render(request, 'booksDetail.html', data)

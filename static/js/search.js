@@ -25,7 +25,7 @@ let suggestions = [
       console.log("here")
       const searchInput = document.getElementById("searchInput");
       const input = searchInput.querySelector("input");
-      const resultBox = searchInput.querySelector(".resultBox");
+      const resultBox = document.getElementById("search-results-r");
       const icon = searchInput.querySelector(".icon");
       let linkTag = searchInput.querySelector("a");
       let webLink;
@@ -33,7 +33,7 @@ let suggestions = [
       // if user press any key and release
       input.onkeyup = (e) => {
         let userData = e.target.value; //user enetered data
-        console.log(userData);
+        console.log(resultBox);
         let emptyArray = [];
         if (userData) {
           var xhr = new XMLHttpRequest();
@@ -43,7 +43,7 @@ let suggestions = [
               var response = JSON.parse(xhr.responseText);
               // Update the options of the second field with the filtered options
               response.forEach(function (option) {
-                let url = "/people/" + option.name_slug + "-books";
+                let url = "/people/" + option.name_slug + "-recommended-books";
                 let data = '<a href=' + url +  '> <li>' + option.name + '</li></a>'
                 emptyArray.push(data);
               });

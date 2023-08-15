@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Read Recommend: Books Written by {{people.name}}{% endblock %}
+{% block title %}Books Written by {{people.name}} : Read Recommend{% endblock %}
 {% block extra_head %}
 <link rel="icon" type="image/png" href="/static/img/favicon.ico">
+
+<meta property="og:title" content="Books Written by {{people.name}} : Read Recommend">
+<meta property="og:description" content="This page shows the list of World's Influential People, the books recommended by them, categories of books.">
+<meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
+<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{people.name_slug}} ">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -30,6 +36,11 @@
 
 <meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
+{% load render_json_ld from json_ld %}
+{% render_json_ld jsonWebsite %}
+{% render_json_ld jsonPeople %}
+{% render_json_ld jsonBookList %}
+
 {% endblock %}
 {% block content %}
 
@@ -70,8 +81,10 @@
             <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
+                        {% if people.image %}
                         <img class="img-fluid rounded w-100" src="{{people.image.url}}" alt="{{people.name}}"
                             style="width: 300px !important; height: 280px !important;">
+                            {% endif %}
                     </div>
                     <div class="col-lg-8 wow fadeIn" data-wow-delay="0.5s">
                         <h3 class="mb-3">{{people.name|lower|title}} written Books</h3>
