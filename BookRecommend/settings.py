@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS=['https://*.readrecommend.com']
@@ -94,9 +94,12 @@ WSGI_APPLICATION = 'BookRecommend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': config('DB_NAME'),
+       'USER': config('DB_USERNAME'),
+       'PASSWORD': config('DB_PASSWORD'),
+       'HOST': '127.0.0.1',
+   }
 }
 
 
