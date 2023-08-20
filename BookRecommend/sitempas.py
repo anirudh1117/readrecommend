@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from Celebrity.models import Celebrity
 from Recommend.models import Recommend
-from Books.models import Books
+from Books.models import Books, Categories
 
 # sitemap class
 class StaticSitemap(Sitemap):
@@ -89,3 +89,24 @@ class bookSitemap(Sitemap):
     def description(self, obj):
         return obj.description
     
+
+
+class categoriesSitemap(Sitemap):
+    changefreq = "daily"
+    priority = 1.0
+    protocol = 'https'
+
+    def items(self):
+        categories = Categories.objects.all()
+        return categories
+    
+    def name(self, obj):
+        return obj.name
+    
+    def slug_field(self, obj):
+        return obj.name_slug
+    
+    def location(self,obj):
+        path = reverse('books')
+        path = path + '?categories=best-' + obj.name_slug + '-books'
+        return str(path)

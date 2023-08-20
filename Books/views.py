@@ -8,7 +8,7 @@ import wikipedia
 from .models import SubCategory, Categories, Books, ContactForm
 from Celebrity.models import Celebrity
 from Recommend.models import Recommend
-from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_readrecommed
+from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_categories, get_categories_list, get_json_for_home
 # # Create your views here.
 
 
@@ -40,8 +40,8 @@ def home(request):
     for category in categories:
         keywords = keywords + ', ' + \
             category.get('name') + ', ' + category.get('name_slug')
-        
-    json_website = create_json_for_readrecommed()
+
+    json_website = get_json_for_home()
 
     data = {
         "peoples": peoples,
@@ -49,7 +49,7 @@ def home(request):
         "books": books,
         "platform": platform,
         "keywords": keywords,
-        'jsonWebsite' : json_website
+        'jsonWebsite': json_website
     }
     return render(request, 'home.html', data)
 
@@ -58,14 +58,14 @@ def categories(request):
     categories = Categories.objects.annotate(book_count=Count('books')).values(
         'name', 'book_count', 'name_slug').order_by('-book_count')
     keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, twitter, instagram'
-    json_website = create_json_for_readrecommed()
+    json = create_json_for_categories(categories)
     for category in categories:
         keywords = keywords + ', ' + \
             category.get('name') + ', ' + category.get('name_slug')
     data = {
         "categories": categories,
         "keywords": keywords,
-        'jsonWebsite' : json_website
+        'jsonCategories': json
     }
     return render(request, 'categories.html', data)
 
@@ -98,8 +98,43 @@ def about(request):
     return render(request, 'about.html')
 
 
-def gift(request):
-    return render(request, 'gift.html')
+def search(request, keyword):
+    keyword = keyword.replace("-", " ")
+    celebrity_ids = Recommend.objects.values_list("Celebrity_id").distinct()
+    peoples = Celebrity.objects.filter(
+        id__in=celebrity_ids, name__icontains=keyword)
+    people_count = len(peoples)
+
+    author_ids = Books.objects.values_list("author_name_id").distinct()
+    authors = Celebrity.objects.filter(
+        id__in=author_ids, name__icontains=keyword)
+    author_count = len(authors)
+
+    books = Books.objects.filter(name__icontains=keyword)
+    book_count = len(books)
+
+    total = people_count + author_count + book_count
+    data = {
+        "keyword": keyword,
+        "peoples": peoples,
+        "people_count": people_count,
+        "authors": authors,
+        "author_count": author_count,
+        "books": books,
+        "book_count": book_count,
+        "total": total
+    }
+    return render(request, 'search.html', data)
+
+@csrf_protect
+def globalSearch(request):
+    url = '/search/'
+    if request.method == 'POST':
+        keyword = request.POST['keyword']
+        keyword = keyword.replace(' ','-')
+        url = url + keyword
+    
+    return redirect(url)
 
 
 def get_sub_category(request, category_id):
@@ -120,7 +155,7 @@ def books(request):
     books = Books.objects.annotate(count=Count('books')).order_by('-count')
 
     if categories is not None and len(categories) > 0:
-        categories = categories.split(",")
+        categories = get_categories_list(categories)
         books = books.filter(categories__name_slug__in=categories)
     if keyword is not None and len(keyword) > 0:
         books = books.filter(name__icontains=keyword)
@@ -128,9 +163,6 @@ def books(request):
     categories_list = Categories.objects.all().order_by(Length('name').asc())
 
     json_list = create_json_for_list_book(books)
-    json_list["name"] = "Discover Your Next Read: A Curated List"
-    json_list["description"] = "Explore a diverse collection of books from various genres and authors. Discover new stories and expand your reading list."
-    json_website = create_json_for_readrecommed()
 
     keywords = 'book, recommendation, celebrity, author, amazon, best, world'
     for book in books:
@@ -143,8 +175,7 @@ def books(request):
         "books": books,
         'keywords': keywords,
         "categories": categories_list,
-        'jsonList' : json_list,
-        'jsonWebsite' : json_website
+        'jsonList': json_list
     }
 
     return render(request, 'books.html', data)
@@ -164,7 +195,12 @@ def filterBooks(request):
         if len(keyword) > 0:
             url = url + keyword
         if len(categories) > 0:
-            url = url + '&categories=' + ','.join(categories)
+            url = url + '&categories='
+            lenOfCategories = len(categories)
+            for i in range(0, lenOfCategories):
+                url = url + 'best-{0}-books'.format(categories[i])
+                if i < (lenOfCategories - 1):
+                    url = url + ','
 
     return redirect(url)
 
@@ -200,7 +236,6 @@ def bookDetail(request, name):
         keywords = keywords + ', ' + people.name + ', ' + people.name_slug
 
     json_detail = create_json_for_book_Detail(book, zip(peoples, platform))
-    json_website = create_json_for_readrecommed()
 
     peoples = zip(peoples, platform)
     recomBooks = Books.objects.filter(
@@ -221,9 +256,7 @@ def bookDetail(request, name):
         "description": description,
         "wikipedia": wikipedia_page(book.name),
         "peoples": peoples,
-        'jsonPeopleList' : json_detail["celebrity"],
-        'jsonBook' : json_detail["book"],
-        'jsonWebsite' : json_website
+        'jsonPeopleList': json_detail,
     }
 
     return render(request, 'booksDetail.html', data)

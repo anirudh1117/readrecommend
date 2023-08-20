@@ -37,9 +37,7 @@
 <meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{people.name_slug}} ">
 
 {% load render_json_ld from json_ld %}
-{% render_json_ld jsonWebsite %}
 {% render_json_ld jsonPeople %}
-{% render_json_ld jsonBookList %}
 {% endblock %}
 {% block content %}
 
@@ -80,7 +78,7 @@
             <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
-                        <img class="img-fluid rounded w-100" src="{{people.image.url}}" alt="{{people.name}}"
+                        <img class="img-fluid rounded w-100" src="{% if people.image %} {{people.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" alt="{{people.name}}"
                             style="width: 300px !important; height: 280px !important;">
                     </div>
                     <div class="col-lg-8 wow fadeIn" data-wow-delay="0.5s">

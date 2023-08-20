@@ -37,10 +37,7 @@
 <meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
 {% load render_json_ld from json_ld %}
-{% render_json_ld jsonWebsite %}
 {% render_json_ld jsonPeople %}
-{% render_json_ld jsonBookList %}
-
 {% endblock %}
 {% block content %}
 
@@ -82,7 +79,7 @@
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
                         {% if people.image %}
-                        <img class="img-fluid rounded w-100" src="{{people.image.url}}" alt="{{people.name}}"
+                        <img class="img-fluid rounded w-100" src="{% if people.image %} {{people.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" alt="{{people.name}} Avtar"
                             style="width: 300px !important; height: 280px !important;">
                             {% endif %}
                     </div>

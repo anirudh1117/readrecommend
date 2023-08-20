@@ -26,7 +26,9 @@ class SeriesAdmin(admin.ModelAdmin):
     search_fields = ['name']
     ordering = ['name']
     autocomplete_fields = ['author_name', 'categories']
-    form = SeriesAdminForm
+    #form = SeriesAdminForm
+    inlines = [BooksInline]
+    search_fields = ['name']
 
     class Media:
         js = ('admin/js/adminCategories.js',)
@@ -45,6 +47,7 @@ class BooksImagesInline(admin.TabularInline):
 class BooksAdmin(admin.ModelAdmin):
     inlines = [BooksImagesInline, RecommendationInline]
     autocomplete_fields = ['series', 'author_name', 'categories','sub_categories']
+    search_fields = ['name']
 
     class Media:
         js = ('admin/js/adminCategories.js',)

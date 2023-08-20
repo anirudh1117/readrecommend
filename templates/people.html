@@ -28,7 +28,6 @@
 
 
 {% load render_json_ld from json_ld %}
-{% render_json_ld jsonWebsite %}
 {% render_json_ld jsonList %}
 
 {% endblock %}
@@ -121,7 +120,7 @@
     <div class="col-md-8 animated fadeIn">
         <div class="row g-3">
             {% for people,url in peoples %}
-            <div class="col-lg-4 col-md-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-lg-4 col-md-5 wow fadeInUp d-flex justify-content-center" data-wow-delay="0.1s">
                 <a href="{% url 'people-detail' people.name_slug %}">
                     <div class="team-item rounded overflow-hidden"
                         style="width: 278px !important; height: 384px !important;">

@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
-from .sitempas import StaticSitemap, celebritySitemap, bookSitemap, authorSitemap
+from .sitempas import StaticSitemap, celebritySitemap, bookSitemap, authorSitemap, categoriesSitemap
 
 dynamic = {
     'celebrity': celebritySitemap,
@@ -13,10 +13,11 @@ dynamic = {
 sitemaps = {'static': StaticSitemap,
             'celebrity': celebritySitemap,
             'book': bookSitemap,
-            'author': authorSitemap
+            'author': authorSitemap,
+            'category' : categoriesSitemap
         }
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin-secrets@readrecommend/', admin.site.urls),
     path('', include('Books.urls')),
     path('people/', include('Celebrity.urls')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),

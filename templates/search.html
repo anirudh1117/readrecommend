@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}World's Influential People : Read Recommend {% endblock %}
+{% block extra_head %}
+<meta name="description" property="og:description"
+    content="This page shows the list of World's Influential People with smart search and filter by profession">
+<meta name="keywords" content="{{keywords}}">
+
+<meta property="og:title" content="World's Influential People : Read Recommend">
+<meta property="og:description"
+    content="This page shows the list of World's Influential People, the books recommended by them, categories of books.">
+<meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
+<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author ">
+
+<link rel="icon" type="image/png" href="/static/img/favicon.ico">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+
+
+
+{% endblock %}
+{% block content %}
+
+<!-- Spinner Start -->
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<!-- Header Start -->
+<div class="container-fluid header bg-white p-0">
+    <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
+        <div class="col-md-6 p-5 mt-lg-5">
+            <h1 class="display-5 animated fadeIn mb-4">Search result for keyword : {{keyword}}</h1>
+            <nav aria-label="breadcrumb animated fadeIn">
+                <ol class="breadcrumb text-uppercase">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item text-body active" aria-current="page">Search</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-6 animated fadeIn">
+            <img class="img-fluid" src="https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg"
+                alt="read-recommend cover image">
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+
+<div class="container-xxl py-5">
+    <div class="row g-0 justify-content-center flex-md-row">
+        <div class="col-md-3 animated fadeIn">
+            <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                <div class=" wow fadeInRight animated">
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                        <h2 class="mb-3">Explore</h2>
+
+                        <fieldset class="padding-5">
+                            <div class="row mt-2">
+                                <div class="list-group" style="cursor: pointer; ">
+                                    <a class="list-group-item d-flex justify-content-between align-items-center active"
+                                        data-bs-toggle="pill" href="#people">
+                                        People
+                                        <span class="badge bg-dark rounded-pill">{{people_count}}</span>
+                                    </a>
+                                    <a class="list-group-item d-flex justify-content-between align-items-center"
+                                        data-bs-toggle="pill" data-toggle="tab" href="#author">
+                                        Author
+                                        <span class="badge bg-dark rounded-pill">{{author_count}}</span>
+                                    </a>
+                                    <a class="list-group-item d-flex justify-content-between align-items-center"
+                                        data-bs-toggle="pill" data-toggle="tab" href="#books">
+                                        Books
+                                        <span class="badge bg-dark rounded-pill">{{book_count}}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 animated fadeIn">
+        </div>
+
+        <div class="tab-content col-md-6 animated fadeIn">
+            <div id="people" class="tab-pane fade show p-0 active">
+                <div class="col-lg-6">
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                        <h1 class="mb-3">People</h1>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    {% for people in peoples %}
+                    <div class="col-lg-4 col-md-5 wow fadeInUp d-flex justify-content-center py-3"
+                        data-wow-delay="0.1s">
+                        <a href="{% url 'people-detail' people.name_slug %}">
+                            <img src="{% if people.image %} {{people.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}"
+                                alt="{{people.name_slug}} Avtar" class="img-fluid rounded-circle mb-4"
+                                style="width: 150px;" />
+
+                            <div class="text-center mt-1">
+                                <h5 class="fw-bold mb-0">{{people.name|lower|title }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div id="author" class="tab-pane fade show p-0">
+                <div class="col-lg-6">
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.01s">
+                        <h1 class="mb-3">Author</h1>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    {% for people in authors %}
+                    <div class="col-lg-4 col-md-5 wow fadeInUp d-flex justify-content-center py-3"
+                        data-wow-delay="0.01s">
+                        <a href="{% url 'author-detail' people.name_slug %}">
+                            <img src="{% if people.image %} {{people.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}"
+                                alt="{{people.name_slug}} Avtar" class="img-fluid rounded-circle mb-4"
+                                style="width: 150px;" />
+
+                            <div class="text-center mt-1">
+                                <h5 class="fw-bold mb-0">{{people.name|lower|title }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div id="books" class="tab-pane fade show p-0">
+                <div class="col-lg-6">
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                        <h1 class="mb-3">Books</h1>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    {% for book in books %}
+                    <div class="col-lg-4 col-md-5 wow fadeInUp d-flex  py-3" data-wow-delay="0.1s">
+                        <a href="{% url 'book-detail' book.name_slug %}">
+                            {% for bookimage in book.bookimages_set.all|slice:":1" %}
+                            <img src="{% if bookimage.image %} {{bookimage.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}"
+                                alt="{{book.name_slug}} Avtar" class="img-fluid mb-3"
+                                style="width: 160px; height: 170px;" />
+                            {% endfor %}
+
+                            <div class="text-center mt-1">
+                                <h5 class="fw-bold mb-0">{{book.name|lower|title }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    {% endblock %}

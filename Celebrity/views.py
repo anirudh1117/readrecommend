@@ -43,16 +43,12 @@ def people(request):
                 social[2] = socialplatform.link
         platform.append(social)
     json_list = create_json_for_list_celebrity(zip(peoples, platform))
-    json_list["name"] = "Renowned Personalities and Their Recommended Reads: A Curated List"
-    json_list["description"] = "Explore a curated compilation of celebrated individuals and their literary recommendations on our platform. Discover a treasure trove of insightful books endorsed by notable personalities across various domains. "
-    json_website = create_json_for_readrecommed()
     peoples = zip(peoples, platform)
     data = {
         "peoples": peoples,
         'professions': profession_list,
         'keywords': keywords,
-        'jsonList' : json_list,
-        'jsonWebsite' : json_website
+        'jsonList' : json_list
     }
 
     return render(request, 'people.html', data)
@@ -100,7 +96,7 @@ def peopleDetail(request, name):
             book.author_name.name + ', ' + book.title + \
             ', ' + clean_description(cs.description)
     json_detail = create_json_for_celebrity_Detail(cs, platform, books)
-    json_website = create_json_for_readrecommed()
+
     data = {
         "people": cs,
         "bookrecoms": bookrecoms,
@@ -110,9 +106,7 @@ def peopleDetail(request, name):
         "platform": platform,
         "wikipedia": wikipedia_page(cs.name),
         "recommendedCelebrity": recommended_celebrity,
-        'jsonPeople' : json_detail["celebrity"],
-        'jsonBookList' : json_detail["books"],
-        'jsonWebsite' : json_website
+        'jsonPeople' : json_detail
     }
 
     return render(request, 'peopleDetail.html', data)
@@ -192,17 +186,13 @@ def author(request):
         platform.append(social)
 
     json_list = create_json_for_list_celebrity(zip(peoples, platform))
-    json_list["name"] = "Discover Amazing Authors: A Curated List"
-    json_list["description"] = "Explore a curated list of authors and their contributions in various fields."
-    json_website = create_json_for_readrecommed()
     peoples = zip(peoples, platform)
 
     data = {
         "peoples": peoples,
         'professions': profession_list,
         'keywords': keywords,
-        'jsonList' : json_list,
-        'jsonWebsite' : json_website
+        'jsonList' : json_list
     }
 
     return render(request, 'author.html', data)
@@ -232,7 +222,6 @@ def authorDetail(request, name):
     recommended_celebrity = recommended_celebrity.filter(count__gt=0)
 
     json_detail = create_json_for_author_Detail(cs, platform, books)
-    json_website = create_json_for_readrecommed()
 
     if len(recommended_celebrity) > 6:
         recommended_celebrity = recommended_celebrity[:6]
@@ -256,9 +245,7 @@ def authorDetail(request, name):
         "platform": platform,
         "wikipedia": wikipedia_page(cs.name),
         "recommendedCelebrity": recommended_celebrity,
-        'jsonPeople' : json_detail["celebrity"],
-        'jsonBookList' : json_detail["books"],
-        'jsonWebsite' : json_website
+        'jsonPeople' : json_detail
     }
 
     return render(request, 'authorDetail.html', data)
