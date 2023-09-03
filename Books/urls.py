@@ -7,7 +7,9 @@ urlpatterns = [
     path('search/<str:keyword>', views.search, name='search'),
     path('global-search', views.globalSearch, name='global-search'),
     path('books-categories', views.categories, name='categories'),
-    path('series', views.series, name='series'),
+    path('series/', views.series, name='series'),
+    path('filter-series', views.filterSeries, name="filter-series"),
+    path('series/<str:name>-books-in-order', views.seriesDetail, name='series-detail'),
     path('about', views.about, name='about'),
    
     path('contact-us', views.contact, name='contact'),

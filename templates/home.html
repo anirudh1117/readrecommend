@@ -157,7 +157,7 @@
             {% for category in categories %}
             <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
                 <a class="cat-item d-block bg-light text-center rounded p-3"
-                    href="{% url 'books' %}?categories=best-{{category.name_slug}}-books">
+                    href="{% url 'books' %}?categories={{category.name_slug}} ">
                     <div class="rounded p-4">
                         <div class="icon mb-3">
                             <img class="img-fluid" src="{% static 'img/icon-housing.png' %}" alt="Icon">
@@ -211,7 +211,8 @@
                                     {{ book.recommendation_count }} recommendations</div>
                             </div>
                             <div class="p-4 pb-0">
-                                <a class="d-block h5 mb-3 text-center" href="{% url 'book-detail' book.name_slug %}">{{book.name|lower|title}}</a>
+                                <a class="d-block h5 mb-3 text-center"
+                                    href="{% url 'book-detail' book.name_slug %}">{{book.name|lower|title}}</a>
                                 <a href="{% url 'author-detail' book.author_name.name_slug %}">
                                     <div class="d-flex align-items-center">
                                         <img class="img-fluid flex-shrink-0 rounded"
@@ -269,8 +270,7 @@
                 <div class="bg-white border rounded p-4">
                     <p>"There is more treasure in books than in all the pirates loot on Treasure Island.”</p>
                     <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded" src="static/img/disney.jpg"
-                        alt="Walt Disney Avtar"
+                        <img class="img-fluid flex-shrink-0 rounded" src="static/img/disney.jpg" alt="Walt Disney Avtar"
                             style="width: 45px; height: 45px;">
                         <div class="ps-3">
                             <h6 class="fw-bold mb-1">Walt Disney</h6>
@@ -284,8 +284,7 @@
                     <p>"Books serve to show a man that those original thoughts of his are not very new after all."</p>
                     <div class="d-flex align-items-center">
                         <img class="img-fluid flex-shrink-0 rounded" src="static/img/lincoin.jpg"
-                        alt="Abraham Lincoin Avtar"
-                            style="width: 45px; height: 45px;">
+                            alt="Abraham Lincoin Avtar" style="width: 45px; height: 45px;">
                         <div class="ps-3">
                             <h6 class="fw-bold mb-1">Abraham Lincoln</h6>
                             <small>American statesman ,lawyer</small>

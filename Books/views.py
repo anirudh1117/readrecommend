@@ -5,10 +5,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.db.models.functions import Length
 import wikipedia
 
-from .models import SubCategory, Categories, Books, ContactForm
+from .models import SubCategory, Categories, Books, ContactForm, Series
 from Celebrity.models import Celebrity
 from Recommend.models import Recommend
-from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_categories, get_categories_list, get_json_for_home
+from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_categories, get_json_for_home, create_json_for_series_Detail, create_json_for_list_series
 # # Create your views here.
 
 
@@ -71,7 +71,35 @@ def categories(request):
 
 
 def series(request):
-    return render(request, 'series.html')
+    categories = request.GET.get('categories', None)
+    keyword = request.GET.get('keyword', None)
+    series = Series.objects.annotate(count=Count('books')).order_by('-count')
+
+    if categories is not None and len(categories) > 0:
+        categories = categories.split(",")
+        series = series.filter(categories__name_slug__in=categories)
+    if keyword is not None and len(keyword) > 0:
+        series = series.filter(name__icontains=keyword)
+
+    categories_list = Categories.objects.all().order_by(Length('name').asc())
+
+    json_list = create_json_for_list_series(series)
+
+    keywords = 'book, recommendation, celebrity, author, amazon, best, world'
+    for seriesObject in series:
+        keywords = keywords + ', ' + seriesObject.name + ', ' + seriesObject.name_slug
+
+    for category in categories_list:
+        keywords = keywords + ', ' + category.name + ', ' + category.name_slug
+
+    data = {
+        "series": series,
+        'keywords': keywords,
+        "categories": categories_list,
+        'jsonList': json_list
+    }
+
+    return render(request, 'series.html', data)
 
 
 def contact(request):
@@ -126,14 +154,15 @@ def search(request, keyword):
     }
     return render(request, 'search.html', data)
 
+
 @csrf_protect
 def globalSearch(request):
     url = '/search/'
     if request.method == 'POST':
         keyword = request.POST['keyword']
-        keyword = keyword.replace(' ','-')
+        keyword = keyword.replace(' ', '-')
         url = url + keyword
-    
+
     return redirect(url)
 
 
@@ -155,7 +184,7 @@ def books(request):
     books = Books.objects.annotate(count=Count('books')).order_by('-count')
 
     if categories is not None and len(categories) > 0:
-        categories = get_categories_list(categories)
+        categories = categories.split(",")
         books = books.filter(categories__name_slug__in=categories)
     if keyword is not None and len(keyword) > 0:
         books = books.filter(name__icontains=keyword)
@@ -195,12 +224,25 @@ def filterBooks(request):
         if len(keyword) > 0:
             url = url + keyword
         if len(categories) > 0:
-            url = url + '&categories='
-            lenOfCategories = len(categories)
-            for i in range(0, lenOfCategories):
-                url = url + 'best-{0}-books'.format(categories[i])
-                if i < (lenOfCategories - 1):
-                    url = url + ','
+            url = url + '&categories=' + ','.join(categories)
+
+    return redirect(url)
+
+@csrf_protect
+def filterSeries(request):
+    url = '/series?'
+    if request.method == 'POST':
+        keyword = ''
+        categories = []
+        for key in request.POST:
+            if key == 'keyword':
+                keyword = 'keyword=' + request.POST[key]
+            elif key != 'csrfmiddlewaretoken':
+                categories.append(key)
+        if len(keyword) > 0:
+            url = url + keyword
+        if len(categories) > 0:
+            url = url + '&categories=' + ','.join(categories)
 
     return redirect(url)
 
@@ -260,6 +302,53 @@ def bookDetail(request, name):
     }
 
     return render(request, 'booksDetail.html', data)
+
+
+def seriesDetail(request, name):
+
+    series = Series.objects.filter(name_slug__iexact=name).annotate(
+        count=Count('books')).order_by('-count')
+    if series.first():
+        series = series[0]
+    else:
+        return redirect("/series")
+    
+    books = Books.objects.filter(series = series).order_by('dateOfPublish')
+    
+    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebbok, twitter, instagram, '
+    keywords = keywords + series.name + ', ' + series.name_slug
+
+    seriesImages = []
+    for book in books:
+        keywords = keywords + book.name + ', ' + book.name_slug
+        for bookimage in book.bookimages_set.all():
+            seriesImages.append(bookimage.image.url if bookimage.image else '')
+
+    recomSeries = Series.objects.filter(
+        categories__in=series.categories.all()).exclude(id=series.id)
+    recomSeries = recomSeries.annotate(count=Count('books')).order_by('-count')
+    recomSeries = recomSeries.filter(count__gt=0)
+    if len(recomSeries) > 6:
+        recomSeries = recomSeries[:6]
+    description = "This page shows Series: " + series.name + \
+        " , author and list of celebrities"
+    for recom in recomSeries:
+        keywords = keywords + ', ' + recom.name + ', ' + recom.name_slug
+    
+    json_detail = create_json_for_series_Detail(series, books)
+
+    data = {
+        "series": series,
+        "books" : books,
+        "seriesImages" : seriesImages,
+        "recomSeries": recomSeries,
+        "keywords": keywords,
+        "description": description,
+        "wikipedia": wikipedia_page(series.name),
+        'jsonSeriesList': json_detail,
+    }
+
+    return render(request, 'seriesDetail.html', data)
 
 
 def wikipedia_page(celebrity_name):

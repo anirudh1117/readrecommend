@@ -32,6 +32,11 @@ class SubCategory(models.Model):
             self.name_slug = slugify(self.name.upper())
         super().save(*args, **kwargs)
 
+def get_upload_series_path(instance, filename):
+    field_value = instance.name
+    # date_time = timezone.now().strftime('%Y/%m/%d')
+    filename = os.path.basename(filename)
+    return f'media/Series/{field_value}/{filename}'
 
 class Series(models.Model):
     name = models.CharField(max_length=100,blank=True)
@@ -42,6 +47,7 @@ class Series(models.Model):
     categories = models.ManyToManyField('Categories', blank=True)
     sub_categories = models.ManyToManyField('SubCategory', blank=True)
     ISBN = models.CharField(max_length=100,blank=True)
+    image = models.FileField(upload_to=get_upload_series_path, blank=True)
 
 
     def __str__(self):
@@ -53,6 +59,10 @@ class Series(models.Model):
         if self.pk is None and Series.objects.filter(name_slug=self.name_slug).exists():
             raise ValidationError("Name must be unique (case-insensitive).")
         super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        path = reverse('series-detail', args=[self.name_slug])
+        return str(path)
 
 
 class Books(models.Model):

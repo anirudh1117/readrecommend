@@ -41,9 +41,10 @@
                 <a href="{% url 'people' %}" class="nav-item nav-link {% if request.path == url %} active {% endif %}" >
                     People
                 </a>
-                {% url 'author' as url %}
-                <a href="{% url 'author' %}" class="nav-item nav-link {% if request.path == url %} active {% endif %}" >
-                    Author
+                
+                {% url 'series' as url %}
+                <a href="{% url 'series' %}" class="nav-item nav-link {% if request.path == url %} active {% endif %}" >
+                    Series
                 </a>
 
                 {% url 'books' as url %}
@@ -54,6 +55,11 @@
                 {% url 'categories' as url %}
                 <a href="{% url 'categories' %}" class="nav-item nav-link {% if request.path == url %} active {% endif %}" >
                     Categories
+                </a>
+
+                {% url 'author' as url %}
+                <a href="{% url 'author' %}" class="nav-item nav-link {% if request.path == url %} active {% endif %}" >
+                    Author
                 </a>
             </div>
         </div>

@@ -86,7 +86,6 @@ def create_json_for_book(book):
         "name": book.name,
         # "slug": book.name_slug,
         "@id": "readrecommend.com" + str(reverse('book-detail', args=[book.name_slug])),
-        "url": str(reverse('book-detail', args=[book.name_slug])),
         "description": book.description,
         "about": ', '.join(category.name for category in book.categories.all()),
         "image": "readrecommend.com" + ''.join(bookimage.image.url for bookimage in book.bookimages_set.all()),
@@ -94,6 +93,22 @@ def create_json_for_book(book):
         # "amazon": book.amazonlink,
         "author": create_json_for_book_author(book.author_name),
         "datePublished": book.dateOfPublish
+    }
+
+    return json
+
+def create_json_for_series(series):
+    json = {
+        "@type": "Book",
+        "name": series.name,
+        # "slug": book.name_slug,
+        "@id": "readrecommend.com" + str(reverse('series-detail', args=[series.name_slug])),
+        "description": series.description,
+        "about": ', '.join(category.name for category in series.categories.all()),
+        "image": "readrecommend.com" + (series.image.url if series.image else '/static/img/read-recommend-logo-2.png'),
+        "url": "readrecommend.com" + str(reverse('series-detail', args=[series.name_slug])),
+        # "amazon": book.amazonlink,
+        "author": create_json_for_book_author(series.author_name),
     }
 
     return json
@@ -138,6 +153,20 @@ def create_breadcumb_for_book(book, index):
             "url": "readrecommend.com" + str(reverse('book-detail', args=[book.name_slug])),
             "name": book.name,
             "image": "readrecommend.com" + ''.join(bookimage.image.url for bookimage in book.bookimages_set.all()),
+        }
+    }
+    return json
+
+def create_breadcumb_for_series(series, index):
+    json = {
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": series.name,
+        "item": {
+            "@id": "readrecommend.com" + str(reverse('series-detail', args=[series.name_slug])),
+            "url": "readrecommend.com" + str(reverse('series-detail', args=[series.name_slug])),
+            "name": series.name,
+            "image": "readrecommend.com" + (series.image.url if series.image else '/static/img/read-recommend-logo-2.png'),
         }
     }
     return json
@@ -262,6 +291,40 @@ def create_json_for_list_book(books):
 
     return json
 
+def create_json_for_list_series(series_list):
+    series_array = []
+    breadcumb_list = []
+    i = 0
+    for series in series_list:
+        series_array.append(create_json_for_series(series))
+        breadcumb_list.append(create_breadcumb_for_series(series, i))
+        i = i + 1
+
+    website_json = create_json_for_readrecommed()
+    json_breadcumb = {
+        "@type": "BreadcrumbList",
+        "name": "Series",
+        "url": "readrecommend.com" + str(reverse('series')),
+        "itemListElement": breadcumb_list
+    }
+
+    json = {
+        "@context": "https://schema.org/",
+        "@type": "WebPage",
+        "url": "readrecommend.com" + str(reverse('series')),
+        "breadcrumb": "Home > Series",
+        "@graph": [series_array, website_json, json_breadcumb],
+        "name":  "Discover Your Next Read: A Curated List",
+        "description": "Explore a diverse collection of books from various genres and authors. Discover new stories and expand your reading list.",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "readrecommend.com" + str(reverse('series')) + "?keyword={search_term}",
+            "query-input": "name=search_term"
+        }
+    }
+
+    return json
+
 
 def create_json_for_celebrity_Detail(people, platform, books):
     json_celebrity = create_json_for_celebrity(people, platform)
@@ -314,6 +377,25 @@ def create_json_for_book_Detail(book, peoples):
         "@graph": [json_book, people_list, website_json],
         "name":  "Mastery Unveiled: Embark on a Journey with Reading " + book.name,
         "description": "Dive into a world of imagination, knowledge, and inspiration with the enchanting selection of  " + book.name + ". With each turn of the page, you're invited to discover the countless treasures woven into the fabric of literature. Embrace the joy of reading, embrace the world of possibilities that these pages hold, and let your imagination soar to new heights."
+    }
+
+    return json
+
+def create_json_for_series_Detail(series, books):
+    json_book = create_json_for_series(series)
+    website_json = create_json_for_readrecommed()
+    book_list = []
+    for book in books:
+        book_list.append(create_json_for_book(book))
+
+    json = {
+        "@context": "https://schema.org/",
+        "@type": "WebPage",
+        "breadcrumb": "Home > Books > " + book.name,
+        "url": "readrecommend.com" + str(reverse('book-detail', args=[book.name_slug])),
+        "@graph": [json_book, book_list, website_json],
+        "name":  "Mastery Unveiled: Embark on a Journey with Reading " + series.name,
+        "description": "Dive into a world of imagination, knowledge, and inspiration with the enchanting selection of  " + series.name + ". With each turn of the page, you're invited to discover the countless treasures woven into the fabric of literature. Embrace the joy of reading, embrace the world of possibilities that these pages hold, and let your imagination soar to new heights."
     }
 
     return json
