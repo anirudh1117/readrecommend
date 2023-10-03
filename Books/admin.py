@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import AutocompleteSelect
-from .models import BookImages, Books,  SubCategory, Categories, Series
+from .models import BookImages, Books,  SubCategory, Categories, Series, FqBooks, FqSeries
 from Recommend.admin import RecommendationInline
+
+admin.site.register(FqBooks)
+admin.site.register(FqSeries)
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
@@ -14,6 +17,9 @@ class SubCategoryInline(admin.TabularInline):
 
 class BooksInline(admin.TabularInline):
     model = Books
+
+class SeriesFQInline(admin.TabularInline):
+    model = FqSeries
 
 class SeriesAdminForm(forms.ModelForm):
     books = forms.ModelChoiceField(
@@ -27,7 +33,7 @@ class SeriesAdmin(admin.ModelAdmin):
     ordering = ['name']
     autocomplete_fields = ['author_name', 'categories']
     #form = SeriesAdminForm
-    inlines = [BooksInline]
+    inlines = [BooksInline, SeriesFQInline]
     search_fields = ['name']
 
     class Media:
@@ -42,10 +48,13 @@ class CategoriesAdmin(admin.ModelAdmin):
 class BooksImagesInline(admin.TabularInline):
     model = BookImages
 
+class BooksFQInline(admin.TabularInline):
+    model = FqBooks
+
 
 @admin.register(Books)
 class BooksAdmin(admin.ModelAdmin):
-    inlines = [BooksImagesInline, RecommendationInline]
+    inlines = [BooksImagesInline, RecommendationInline, BooksFQInline]
     autocomplete_fields = ['series', 'author_name', 'categories','sub_categories']
     search_fields = ['name']
 

@@ -61,7 +61,7 @@
         </div>
         <div class="col-md-6 animated fadeIn">
             <img class="img-fluid" src="https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg"
-                alt="read-recommend cover image">
+                alt="read-recommend cover image" loading="lazy">
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
                         <div class="text-center">
                             {% for bookimage in bookrecom.bookimages_set.all|slice:":1" %}
                             <a href="{{bookrecom.amazonlink}}" target="_blank"><img class="img-fluid" src="{{bookimage.image.url}}" alt="{{ bookrecom.name }}"
-                                    style="padding-top: 10px; border-radius: 10px; width: 350px; height: 400px;"></a>
+                                    style="padding-top: 10px; border-radius: 10px; width: 350px; height: 400px;" loading="lazy"></a>
                             {% endfor %}
                         </div>
 
@@ -150,7 +150,7 @@
                                 {% if bookrecom.author_name.image %}
                                 <img class="img-fluid flex-shrink-0 rounded" src="{{bookrecom.author_name.image.url}}"
                                     style="width: 45px; height: 45px;"
-                                    alt="{{bookrecom.book.author_name.name_slug}} Avtar">
+                                    alt="{{bookrecom.book.author_name.name_slug}} Avtar" loading="lazy">
                                 {% endif %}
                                 <div class="ps-3">
                                     <h6 class="fw-bold mb-1">{{ bookrecom.author_name.name|lower|title}}</h6>

@@ -89,6 +89,12 @@
                                         Books
                                         <span class="badge bg-dark rounded-pill">{{book_count}}</span>
                                     </a>
+
+                                    <a class="list-group-item d-flex justify-content-between align-items-center"
+                                        data-bs-toggle="pill" data-toggle="tab" href="#series">
+                                        Series
+                                        <span class="badge bg-dark rounded-pill">{{series_count}}</span>
+                                    </a>
                                 </div>
                             </div>
                         </fieldset>
@@ -172,6 +178,31 @@
 
                             <div class="text-center mt-1">
                                 <h5 class="fw-bold mb-0">{{book.name|lower|title }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div id="series" class="tab-pane fade show p-0">
+                <div class="col-lg-6">
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                        <h1 class="mb-3">Series</h1>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    {% for seriesObject in series %}
+                    <div class="col-lg-4 col-md-5 wow fadeInUp d-flex  py-3" data-wow-delay="0.1s">
+                        <a href="{% url 'series-detail' seriesObject.name_slug %}">
+                            <img src="{% if seriesObject.image %} {{seriesObject.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}"
+                                alt="{{seriesObject.name_slug}} Avtar" class="img-fluid mb-3"
+                                style="width: 160px; height: 170px;" />
+
+                            <div class="text-center mt-1">
+                                <h5 class="fw-bold mb-0">{{seriesObject.name|lower|title }}</h5>
                             </div>
                         </a>
                     </div>

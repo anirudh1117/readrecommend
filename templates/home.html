@@ -64,7 +64,7 @@
             <div class="owl-carousel header-carousel">
                 <div class="owl-carousel-item">
                     <img class="img-fluid" src="https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg"
-                        alt="read-recommend cover image">
+                        alt="read-recommend cover image" loading="lazy">
                 </div>
             </div>
         </div>
@@ -114,7 +114,7 @@
                     style="width: 278px !important; height: 384px !important;">
                     <a href="{% url 'people-detail' people.name_slug %}">
                         <div class="position-relative">
-                            <img class="img-fluid" src="{{people.image.url}}" alt="{{people.name}} Avatar">
+                            <img class="img-fluid" src="{{people.image.url}}" alt="{{people.name}} Avatar" loading="lazy">
                             <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                                 {% for socialLink in url %}
                                 {% if forloop.counter0 == 0 %}
@@ -160,7 +160,7 @@
                     href="{% url 'books' %}?categories={{category.name_slug}} ">
                     <div class="rounded p-4">
                         <div class="icon mb-3">
-                            <img class="img-fluid" src="{% static 'img/icon-housing.png' %}" alt="Icon">
+                            <img class="img-fluid" src="{% static 'img/icon-housing.png' %}" alt="Icon" loading="lazy">
                         </div>
                         <h6>{{ category.name }}</h6>
                         <span>{{ category.book_count }} Books</span>
@@ -203,7 +203,7 @@
                                 {% for bookimage in book.bookimages_set.all|slice:":1" %}
                                 <a href="{{book.amazonlink}}" target="_blank"><img class="img-fluid"
                                         src="{{bookimage.image.url}}" alt="{{ book.name }}"
-                                        style="padding: 20px 40px 20px 40px; border-radius: 10px;"></a>
+                                        style="padding: 20px 40px 20px 40px; border-radius: 10px;" loading="lazy"></a>
                                 {% endfor %}
 
                                 <div
@@ -217,7 +217,7 @@
                                     <div class="d-flex align-items-center">
                                         <img class="img-fluid flex-shrink-0 rounded"
                                             src="{{book.author_name.image.url}}" style="width: 45px; height: 45px;"
-                                            alt="{{book.author_name.name_slug}} Avtar">
+                                            alt="{{book.author_name.name_slug}} Avtar" loading="lazy">
                                         <div class="ps-3">
                                             <h6 class="fw-bold mb-1">{{ book.author_name.name|lower|title}}</h6>
                                             <small>{{ book.author_name.professions.all |join:", "}}</small>
@@ -271,7 +271,7 @@
                     <p>"There is more treasure in books than in all the pirates loot on Treasure Island.”</p>
                     <div class="d-flex align-items-center">
                         <img class="img-fluid flex-shrink-0 rounded" src="static/img/disney.jpg" alt="Walt Disney Avtar"
-                            style="width: 45px; height: 45px;">
+                            style="width: 45px; height: 45px;" loading="lazy">
                         <div class="ps-3">
                             <h6 class="fw-bold mb-1">Walt Disney</h6>
                             <small> American entrepreneur, animator</small>
@@ -284,7 +284,7 @@
                     <p>"Books serve to show a man that those original thoughts of his are not very new after all."</p>
                     <div class="d-flex align-items-center">
                         <img class="img-fluid flex-shrink-0 rounded" src="static/img/lincoin.jpg"
-                            alt="Abraham Lincoin Avtar" style="width: 45px; height: 45px;">
+                            alt="Abraham Lincoin Avtar" style="width: 45px; height: 45px;" loading="lazy">
                         <div class="ps-3">
                             <h6 class="fw-bold mb-1">Abraham Lincoln</h6>
                             <small>American statesman ,lawyer</small>

@@ -30,10 +30,10 @@
 
 <meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
-<meta property="og:title" content="Book {{book.name}} : Read Recommend">
+<meta property="og:title" content="Series {{series.name}} : Read Recommend">
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
-<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{book.name_slug}}, {{book.author_name.name_slug}} ">
+<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{series.name_slug}}, {{series.author_name.name_slug}} ">
 
 {% load render_json_ld from json_ld %}
 {% render_json_ld jsonSeriesList %}
@@ -65,7 +65,7 @@
         </div>
         <div class="col-md-6 animated fadeIn">
             <img class="img-fluid" src="https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg"
-                alt="read-recommend cover image">
+                alt="read-recommend cover image" loading="lazy">
         </div>
     </div>
 </div>
@@ -81,12 +81,12 @@
                         <div class="carousel-inner w-60">
                             
                           <div class="carousel-item active" data-bs-interval="1000">
-                            <img src="{% if series.image %} {{series.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" class="d-block w-60" alt="...">
+                            <img src="{% if series.image %} {{series.image.url}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" class="d-block w-60" alt="{{series.name}} image-0">
                           </div>
 
                           {% for seriesImage in seriesImages %}
                           <div class="carousel-item" data-bs-interval="1000">
-                            <img src="{% if seriesImage %} {{seriesImage}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" class="d-block w-60" alt="">
+                            <img src="{% if seriesImage %} {{seriesImage}} {% else %} {% static 'img/read-recommend-logo-2.png' %} {% endif %}" class="d-block w-60" alt="{{series.name}} image-{{ forloop.counter }}">
                           </div>
                           {% endfor %}
                         </div>
@@ -107,7 +107,7 @@
                     <div class="d-flex align-items-center">
                         {% if series.author_name.image %}
                         <img class="img-fluid flex-shrink-0 rounded" src="{{series.author_name.image.url}}"
-                            style="width: 45px; height: 45px;" alt="{{series.author_name.name_slug}} Avtar">
+                            style="width: 45px; height: 45px;" alt="{{series.author_name.name_slug}} Avtar" loading="lazy">
                         {% endif %}
                         <div class="ps-3">
                             <h6 class="fw-bold mb-1">{{ series.author_name.name|lower|title}}</h6>
@@ -168,7 +168,7 @@
                         <div class="text-center">
                             {% for bookimage in bookrecom.bookimages_set.all|slice:":1" %}
                             <a href="{{bookrecom.amazonlink}}" target="_blank"><img class="img-fluid" src="{{bookimage.image.url}}" alt="{{ bookrecom.name }}"
-                                    style="padding-top: 10px; border-radius: 10px; width: 350px; height: 400px;"></a>
+                                    style="padding-top: 10px; border-radius: 10px; width: 350px; height: 400px;" loading="lazy"></a>
                             {% endfor %}
                         </div>
 
@@ -189,7 +189,7 @@
                                 {% if bookrecom.author_name.image %}
                                 <img class="img-fluid flex-shrink-0 rounded" src="{{bookrecom.author_name.image.url}}"
                                     style="width: 45px; height: 45px;"
-                                    alt="{{bookrecom.book.author_name.name_slug}} Avtar">
+                                    alt="{{bookrecom.book.author_name.name_slug}} Avtar" loading="lazy">
                                 {% endif %}
                                 <div class="ps-3">
                                     <h6 class="fw-bold mb-1">{{ bookrecom.author_name.name|lower|title}}</h6>
@@ -212,6 +212,27 @@
                                 Amazon</a>
                         </small>
                     </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mx-auto mb-5 wow slideInLeft py-3" data-wow-delay="0.1s">
+            <h2 class="mb-3">FAQ</h2>
+        </div>
+
+        <div class="accordion accordion-flush py" id="accordionFlushExample">
+            {% for seriesFQ in series.fqseries_set.all %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        #{{ forloop.counter }} : {{ seriesFQ.question }}
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body"> {{ seriesFQ.answer }}</div>
                 </div>
             </div>
             {% endfor %}

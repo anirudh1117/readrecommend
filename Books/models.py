@@ -104,6 +104,17 @@ class BookImages(models.Model):
     book = models.ForeignKey( "Books", on_delete=models.CASCADE)
     image = models.FileField(upload_to=get_upload_path, blank=True)
 
+
+class FqBooks(models.Model):
+    book = models.ForeignKey( "Books", on_delete=models.CASCADE)
+    question = models.TextField(null=True, blank=True)
+    answer = models.TextField(null=True, blank=True)
+
+class FqSeries(models.Model):
+    book = models.ForeignKey( "Series", on_delete=models.CASCADE)
+    question = models.TextField(null=True, blank=True)
+    answer = models.TextField(null=True, blank=True)
+
 # class Rating(models.Model):
 #     name = models.CharField(max_length=100,blank=False)
 #     rating = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])

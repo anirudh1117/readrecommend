@@ -141,7 +141,10 @@ def search(request, keyword):
     books = Books.objects.filter(name__icontains=keyword)
     book_count = len(books)
 
-    total = people_count + author_count + book_count
+    series = Series.objects.filter(name__icontains=keyword)
+    series_count = len(series)
+
+    total = people_count + author_count + book_count + series_count
     data = {
         "keyword": keyword,
         "peoples": peoples,
@@ -150,6 +153,8 @@ def search(request, keyword):
         "author_count": author_count,
         "books": books,
         "book_count": book_count,
+        "series": series,
+        "series_count": series_count,
         "total": total
     }
     return render(request, 'search.html', data)
