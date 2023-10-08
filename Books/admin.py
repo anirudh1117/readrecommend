@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import AutocompleteSelect
-from .models import BookImages, Books,  SubCategory, Categories, Series, FqBooks, FqSeries
+from .models import BookImages, Books,  SubCategory, Categories, Series, FqBooks, FqSeries, ContactForm
 from Recommend.admin import RecommendationInline
 
 admin.site.register(FqBooks)
 admin.site.register(FqSeries)
+admin.site.register(ContactForm)
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):

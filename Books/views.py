@@ -69,6 +69,9 @@ def categories(request):
     }
     return render(request, 'categories.html', data)
 
+def privacyPolicy(request):
+    return render(request, 'privacyPolicy.html')
+
 
 def series(request):
     categories = request.GET.get('categories', None)

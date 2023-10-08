@@ -11,6 +11,7 @@ urlpatterns = [
     path('filter-series', views.filterSeries, name="filter-series"),
     path('series/<str:name>-books-in-order', views.seriesDetail, name='series-detail'),
     path('about', views.about, name='about'),
+    path('privacy-policy', views.privacyPolicy, name='privacy-policy'),
    
     path('contact-us', views.contact, name='contact'),
     path('api/subcategories/<str:category_id>', views.get_sub_category, name='subcategory_api'),
