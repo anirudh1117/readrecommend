@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Books Recommended by {{people.name}} : Read Recommend{% endblock %}
+{% block title %}Books Recommended by {{people.name}} ({{bookrecoms |length }} Books) : Read Recommend{% endblock %}
 {% block extra_head %}
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -31,10 +31,10 @@
 <meta name="description" property="og:description" content="{{description}}">
 <meta name="keywords" content="{{keywords}}">
 
-<meta property="og:title" content="Books Recommended by {{people.name}} : Read Recommend">
+<meta property="og:title" content="Books Recommended by {{people.name}}({{bookrecoms |length }} Books) : Read Recommend">
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
-<meta property="website:tag" content="read, recommend, celebrity, famous, amazon, book, author, {{people.name_slug}} ">
+<meta property="website:tag" content="read recommend, books recommended by {{people.name_slug}} ">
 
 {% load render_json_ld from json_ld %}
 {% render_json_ld jsonPeople %}
@@ -54,12 +54,12 @@
 <div class="container-fluid header bg-white p-0">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
         <div class="col-md-6 p-5 mt-lg-5">
-            <h1 class="display-5 animated fadeIn mb-4">{{people.name | lower | title}}</h1>
+            <h1 class="display-5 animated fadeIn mb-4">Books recommended by {{people.name | lower | title}} ({{bookrecoms |length }} Books)</h1>
             <nav aria-label="breadcrumb animated fadeIn">
                 <ol class="breadcrumb text-uppercase">
                     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{% url 'people' %}">People</a></li>
-                    <li class="breadcrumb-item text-body active" aria-current="page">{{people.name}}</li>
+                    <li class="breadcrumb-item text-body active" aria-current="page">{{people.name}} recommended books</li>
                 </ol>
             </nav>
         </div>
@@ -98,6 +98,11 @@
                             </div>
 
                             <p>{{people.description |truncatewords:50}}</p>
+                        </div>
+                        <div class="alert alert-success" role="alert">
+                            <small>
+                            As an Amazon Associate, we earn money from purchases made through links in this page.
+                        </small>
                         </div>
                         <a onclick="window.open('{{wikipedia}}')" class="btn btn-outline-dark py-2 px-2">Wikipedia</a>
                     </div>

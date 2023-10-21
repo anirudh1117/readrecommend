@@ -34,7 +34,7 @@
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="readrecommend.com{{ request.get_full_path }}">
 <meta property="website:tag"
-    content="read, recommend, celebrity, famous, amazon, book, author, {{book.name_slug}}, {{book.author_name.name_slug}} ">
+    content="read recommend, book, {{book.name}} book">
 
 {% load render_json_ld from json_ld %}
 {% render_json_ld jsonPeopleList %}
@@ -55,12 +55,12 @@
 <div class="container-fluid header bg-white p-0">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
         <div class="col-md-6 p-5 mt-lg-5">
-            <h1 class="display-5 animated fadeIn mb-4">{{book.name | lower | title}}</h1>
+            <h1 class="display-5 animated fadeIn mb-4">{{book.name | lower | title}} Book ({{ book.count }} times recommended)</h1>
             <nav aria-label="breadcrumb animated fadeIn">
                 <ol class="breadcrumb text-uppercase">
                     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{% url 'books' %}">Books</a></li>
-                    <li class="breadcrumb-item text-body active" aria-current="page">{{book.name}}</li>
+                    <li class="breadcrumb-item text-body active" aria-current="page">{{book.name}} Book</li>
                 </ol>
             </nav>
         </div>
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="mb-4">{{book.name | lower | title}}</h1>
+                <h1 class="mb-4">{{book.name | lower | title}} Book</h1>
                 <a href="{% url 'author-detail'  book.author_name.name_slug %}" class="text-center">
                     <div class="d-flex align-items-center">
                         {% if book.author_name.image %}
@@ -103,6 +103,11 @@
                 {% if bookrecom.categories.all %}
                 <p><i class="fa fa-check text-primary me-3"></i> {{book.categories.all |join:", " }}</p>
                 {% endif %}
+                <div class="alert alert-success" role="alert">
+                    <small>
+                    As an Amazon Associate, we earn money from purchases made through links in this page.
+                </small>
+                </div>
                 <a onclick="window.open('{{book.amazonlink}}')" class="btn btn-primary py-2 px-2 me-2"><i
                         class="bi bi-cart4 me-2"></i>View on Amazon</a>
                 <a onclick="window.open('{{wikipedia}}')" class="btn btn-outline-dark py-2 px-2">Wikipedia</a>

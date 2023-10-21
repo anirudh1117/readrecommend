@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
-{% block title %}Read Recommend : Books Categories {% endblock %}
+{% block title %}Read Recommend : Best Books on Categories {% endblock %}
 {% block extra_head %}
-<meta name="description" property="og:description" content="This page shows the list of Books Categories">
+<meta name="description" property="og:description" content="Explore the hidden gem of Categories and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers.">
 <meta name="keywords" content="{{keywords}}">
 
 <link rel="icon" type="image/png" href="/static/img/favicon.ico">
@@ -84,7 +84,7 @@
                         <div class="icon mb-3">
                             <img class="img-fluid" src="{% static 'img/icon-housing.png' %}" alt="Icon">
                         </div>
-                        <h6>{{ category.name }}</h6>
+                        <h6>Best Books on {{ category.name }}</h6>
                         <span>{{ category.book_count }} Books</span>
                     </div>
                 </a>

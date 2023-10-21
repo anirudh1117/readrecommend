@@ -19,7 +19,7 @@ def home(request):
         'name', 'book_count', 'name_slug').order_by('-book_count')[:4]
     books = Books.objects.annotate(recommendation_count=Count(
         'books')).order_by('-recommendation_count')[:3]
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, twitter, instagram'
+    keywords = 'read recommend'
     platform = []
     for people in peoples:
         social = ['#', '#', '#']
@@ -31,15 +31,15 @@ def home(request):
             elif socialplatform.name == "INSTAGRAM":
                 social[2] = socialplatform.link
         platform.append(social)
-        keywords = keywords + ', ' + people.name + ', ' + people.name_slug
+        keywords = keywords + ', books recommend by ' + people.name
     peoples = zip(peoples, platform)
 
     for book in books:
-        keywords = keywords + ', ' + book.name + ', ' + book.name_slug
+        keywords = keywords + ', ' + book.name + " book"
 
     for category in categories:
-        keywords = keywords + ', ' + \
-            category.get('name') + ', ' + category.get('name_slug')
+        keywords = keywords + ', best books on ' + \
+            category.get('name')
 
     json_website = get_json_for_home()
 
@@ -57,11 +57,11 @@ def home(request):
 def categories(request):
     categories = Categories.objects.annotate(book_count=Count('books')).values(
         'name', 'book_count', 'name_slug').order_by('-book_count')
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, twitter, instagram'
+    keywords = 'read recommend'
     json = create_json_for_categories(categories)
     for category in categories:
-        keywords = keywords + ', ' + \
-            category.get('name') + ', ' + category.get('name_slug')
+        keywords = keywords + ', best books on ' + \
+            category.get('name')
     data = {
         "categories": categories,
         "keywords": keywords,
@@ -88,12 +88,7 @@ def series(request):
 
     json_list = create_json_for_list_series(series)
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world'
-    for seriesObject in series:
-        keywords = keywords + ', ' + seriesObject.name + ', ' + seriesObject.name_slug
-
-    for category in categories_list:
-        keywords = keywords + ', ' + category.name + ', ' + category.name_slug
+    keywords = 'read recommend, series in order'
 
     data = {
         "series": series,
@@ -201,12 +196,7 @@ def books(request):
 
     json_list = create_json_for_list_book(books)
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world'
-    for book in books:
-        keywords = keywords + ', ' + book.name + ', ' + book.name_slug
-
-    for category in categories_list:
-        keywords = keywords + ', ' + category.name + ', ' + category.name_slug
+    keywords = 'read recommend, books'
 
     data = {
         "books": books,
@@ -270,8 +260,8 @@ def bookDetail(request, name):
     peoples = Celebrity.objects.annotate(
         count=Count('celebritys')).order_by('-count')
     peoples = peoples.filter(id__in=celeberity_ids)
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebbok, twitter, instagram, '
-    keywords = keywords + book.name + ', ' + book.name_slug
+    keywords = 'read recommend'
+    keywords = keywords + book.name + ' book, '
     platform = []
     for people in peoples:
         social = ['#', '#', '#']
@@ -283,7 +273,6 @@ def bookDetail(request, name):
             elif socialplatform.name == "INSTAGRAM":
                 social[2] = socialplatform.link
         platform.append(social)
-        keywords = keywords + ', ' + people.name + ', ' + people.name_slug
 
     json_detail = create_json_for_book_Detail(book, zip(peoples, platform))
 
@@ -294,10 +283,7 @@ def bookDetail(request, name):
     recomBooks = recomBooks.filter(count__gt=0)
     if len(recomBooks) > 6:
         recomBooks = recomBooks[:6]
-    description = "This page shows Book: " + book.name + \
-        " , author and list of celebrities"
-    for recomBook in recomBooks:
-        keywords = keywords + ', ' + recomBook.name + ', ' + recomBook.name_slug
+    description = "Book "+ book.name +"( " + str(len(recomBooks)) + " Recommended ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
 
     data = {
         "book": book,
@@ -323,12 +309,11 @@ def seriesDetail(request, name):
     
     books = Books.objects.filter(series = series).order_by('dateOfPublish')
     
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebbok, twitter, instagram, '
-    keywords = keywords + series.name + ', ' + series.name_slug
+    keywords = 'read recommend'
+    keywords = keywords + ', series ' + series.name + ' in order'
 
     seriesImages = []
     for book in books:
-        keywords = keywords + book.name + ', ' + book.name_slug
         for bookimage in book.bookimages_set.all():
             seriesImages.append(bookimage.image.url if bookimage.image else '')
 
@@ -338,10 +323,7 @@ def seriesDetail(request, name):
     recomSeries = recomSeries.filter(count__gt=0)
     if len(recomSeries) > 6:
         recomSeries = recomSeries[:6]
-    description = "This page shows Series: " + series.name + \
-        " , author and list of celebrities"
-    for recom in recomSeries:
-        keywords = keywords + ', ' + recom.name + ', ' + recom.name_slug
+    description = "Seriesy "+ series.name +"( " + str(len(books)) + " Series Books ) in Order, and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
     
     json_detail = create_json_for_series_Detail(series, books)
 

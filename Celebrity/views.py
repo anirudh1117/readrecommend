@@ -25,11 +25,7 @@ def people(request):
     peoples = peoples.annotate(count=Count('celebritys'))
     profession_list = Profession.objects.all().order_by(Length('name').asc())
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, instagram, twitter'
-    for people in peoples:
-        keywords = keywords + ', ' + people.name + ', ' + people.name_slug
-    for profession in profession_list:
-        keywords = keywords + ', ' + profession.name
+    keywords = 'read recommend, people, celebrity'
 
     platform = []
     for people in peoples:
@@ -82,19 +78,11 @@ def peopleDetail(request, name):
     recommended_celebrity = recommended_celebrity.filter(count__gt=0)
     if len(recommended_celebrity) > 6:
         recommended_celebrity = recommended_celebrity[:6]
-    description = "This page shows Books recommended by " + cs.name + \
-        " and books card contains images, description and Amazon link."
+    description = "Books recommended by "+ cs.name +"( " + str(len(bookrecoms)) + " Books ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world, facebook, instagram, twitter'
-    keywords = keywords + ', ' + cs.name + ', ' + \
-        cs.name_slug + ', ' + clean_description(cs.description)
-    for profession in cs.professions.all():
-        keywords = keywords + ', ' + profession.name
-    for recom in bookrecoms:
-        book = recom.book
-        keywords = keywords + ', ' + book.name + ', ' + book.name_slug + ', ' + \
-            book.author_name.name + ', ' + book.title + \
-            ', ' + clean_description(cs.description)
+    keywords = 'read recommend'
+    keywords = keywords + ', books recommend by' + cs.name
+   
     json_detail = create_json_for_celebrity_Detail(cs, platform, books)
 
     data = {
@@ -167,11 +155,7 @@ def author(request):
     peoples = peoples.annotate(count=Count('books')).order_by('-count')
     profession_list = Profession.objects.all().order_by(Length('name').asc())
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world,facebook, instagram, twitter'
-    for people in peoples:
-        keywords = keywords + ', ' + people.name + ', ' + people.name_slug
-    for profession in profession_list:
-        keywords = keywords + ', ' + profession.name
+    keywords = 'read recommend, author'
 
     platform = []
     for people in peoples:
@@ -225,18 +209,12 @@ def authorDetail(request, name):
 
     if len(recommended_celebrity) > 6:
         recommended_celebrity = recommended_celebrity[:6]
-    description = "This page shows Books written by " + cs.name + \
-        " and books card contains images, description and Amazon link."
 
-    keywords = 'book, recommendation, celebrity, author, amazon, best, world,facebook, instagram, twitter'
-    keywords = keywords + ', ' + cs.name + ', ' + \
-        cs.name_slug + ', ' + clean_description(cs.description)
-    for profession in cs.professions.all():
-        keywords = keywords + ', ' + profession.name
-    for book in books:
-        keywords = keywords + ', ' + book.name + ', ' + book.name_slug + ', ' + \
-            book.author_name.name + ', ' + book.title + \
-            ', ' + clean_description(cs.description)
+    description = "Books written by "+ cs.name +"( " + str(len(books)) + " Books ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
+
+    keywords = 'read recommend'
+    keywords = keywords + ', books written by ' + cs.name
+    
     data = {
         "people": cs,
         "books": books,
