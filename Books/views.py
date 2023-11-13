@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.db.models import Q
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
 from django.db.models.functions import Length
@@ -8,7 +9,7 @@ import wikipedia
 from .models import SubCategory, Categories, Books, ContactForm, Series
 from Celebrity.models import Celebrity
 from Recommend.models import Recommend
-from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_categories, get_json_for_home, create_json_for_series_Detail, create_json_for_list_series
+from utils.common_function import create_json_for_list_book, create_json_for_book_Detail, create_json_for_categories, create_json_for_subcategories, get_json_for_home, create_json_for_series_Detail, create_json_for_list_series
 # # Create your views here.
 
 
@@ -55,19 +56,45 @@ def home(request):
 
 
 def categories(request):
-    categories = Categories.objects.annotate(book_count=Count('books')).values(
-        'name', 'book_count', 'name_slug').order_by('-book_count')
+    categories = Categories.objects.annotate(book_count=Count('books'), subCategory_count=Count('subcategory')).values(
+        'name', 'book_count', 'name_slug', 'subCategory_count').order_by('-book_count')
     keywords = 'read recommend'
     json = create_json_for_categories(categories)
-    for category in categories:
-        keywords = keywords + ', best books on ' + \
-            category.get('name')
+    keywords = keywords + ', best books on categories'
     data = {
         "categories": categories,
         "keywords": keywords,
         'jsonCategories': json
     }
     return render(request, 'categories.html', data)
+
+
+def subCategories(request, name):
+    books_list = []
+    category = Categories.objects.filter(name_slug = name)
+    subCategories = SubCategory.objects.filter(Category__name_slug=name)
+    for subCategory in subCategories:
+        books = Books.objects.filter(Q(categories__name_slug=name) & Q(sub_categories__name=subCategory.name)).values(
+            'name', 'name_slug', 'title')
+        books_list.append(books)
+
+    remainingBooks = Books.objects.filter(Q(categories__name_slug=name) & Q(sub_categories__isnull=True)).values(
+        'name', 'name_slug', 'title')
+    books_list.append(remainingBooks)
+    keywords = 'read recommend'
+    json = create_json_for_subcategories(category[0])
+    for subcategory in subCategories:
+        keywords = keywords + ', best books on ' + \
+            subcategory.name
+    data = {
+        "category" : category[0],
+        "subCategories": subCategories,
+        "books_list" : books_list,
+        "keywords": keywords,
+        'jsonCategories': json
+    }
+    return render(request, 'subCategories.html', data)
+
 
 def privacyPolicy(request):
     return render(request, 'privacyPolicy.html')
@@ -226,6 +253,7 @@ def filterBooks(request):
 
     return redirect(url)
 
+
 @csrf_protect
 def filterSeries(request):
     url = '/series?'
@@ -260,8 +288,8 @@ def bookDetail(request, name):
     peoples = Celebrity.objects.annotate(
         count=Count('celebritys')).order_by('-count')
     peoples = peoples.filter(id__in=celeberity_ids)
-    keywords = 'read recommend'
-    keywords = keywords + book.name + ' book, '
+    keywords = 'read recommend, '
+    keywords = keywords + book.name + ' book'
     platform = []
     for people in peoples:
         social = ['#', '#', '#']
@@ -283,7 +311,8 @@ def bookDetail(request, name):
     recomBooks = recomBooks.filter(count__gt=0)
     if len(recomBooks) > 6:
         recomBooks = recomBooks[:6]
-    description = "Book "+ book.name +"( " + str(len(recomBooks)) + " Recommended ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
+    description = "Book " + book.name + \
+        "( " + str(len(recomBooks)) + " Recommended ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
 
     data = {
         "book": book,
@@ -306,9 +335,9 @@ def seriesDetail(request, name):
         series = series[0]
     else:
         return redirect("/series")
-    
-    books = Books.objects.filter(series = series).order_by('dateOfPublish')
-    
+
+    books = Books.objects.filter(series=series).order_by('dateOfPublish')
+
     keywords = 'read recommend'
     keywords = keywords + ', series ' + series.name + ' in order'
 
@@ -323,14 +352,15 @@ def seriesDetail(request, name):
     recomSeries = recomSeries.filter(count__gt=0)
     if len(recomSeries) > 6:
         recomSeries = recomSeries[:6]
-    description = "Seriesy "+ series.name +"( " + str(len(books)) + " Series Books ) in Order, and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
-    
+    description = "Seriesy " + series.name + \
+        "( " + str(len(books)) + " Series Books ) in Order, and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
+
     json_detail = create_json_for_series_Detail(series, books)
 
     data = {
         "series": series,
-        "books" : books,
-        "seriesImages" : seriesImages,
+        "books": books,
+        "seriesImages": seriesImages,
         "recomSeries": recomSeries,
         "keywords": keywords,
         "description": description,

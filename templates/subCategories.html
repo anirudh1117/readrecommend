@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% load humanize %}
-{% block title %}Read Recommend : Best Books on Categories {% endblock %}
+{% block title %}Read Recommend : Best Books on {{ category.name }} {% endblock %}
 {% block extra_head %}
-<meta name="description" property="og:description" content="Explore the hidden gem of Categories and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers.">
+<meta name="description" property="og:description"
+    content="Explore the hidden gem of Categories and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers.">
 <meta name="keywords" content="{{keywords}}">
 
 <link rel="icon" type="image/png" href="/static/img/favicon.ico">
@@ -50,11 +52,13 @@
 <div class="container-fluid header bg-white p-0">
     <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
         <div class="col-md-6 p-5 mt-lg-5">
-            <h1 class="display-5 animated fadeIn mb-4">Best Books on Categories</h1>
+            <h1 class="display-5 animated fadeIn mb-4">Best Books on {{ category.name }}</h1>
             <nav aria-label="breadcrumb animated fadeIn">
                 <ol class="breadcrumb text-uppercase">
                     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                    <li class="breadcrumb-item text-body active" aria-current="page">Categories</li>
+                    <li class="breadcrumb-item"><a href="{% url 'categories' %}">Categories</a></li>
+                    <li class="breadcrumb-item text-body active" aria-current="page">Best Books on {{ category.name }}
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -69,27 +73,51 @@
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-            <h2 class="mb-3">Books Categories</h2>
-            <p>Exploring Diverse Literary Landscapes: Discover Books Across Varied Categories.
-                Navigate through a rich tapestry of literary genres, each one a doorway to new perspectives, emotions,
-                and adventures. Our curated selection spans a wide spectrum of categories, inviting you to traverse
-                realms of mystery, romance, fantasy, non-fiction, and so much more. </p>
+            <h2 class="mb-3">Best Books on {{ category.name }}</h2>
         </div>
         <div class="row g-4">
-            {% for category in categories %}
-            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                <a class="cat-item d-block bg-light text-center rounded p-3"
-                    href="{% url 'sub-categories' category.name_slug %}">
-                    <div class="rounded p-4">
-                        <div class="icon mb-3">
-                            <img class="img-fluid" src="{% static 'img/icon-housing.png' %}" alt="Icon">
-                        </div>
-                        <h6>Best Books on {{ category.name }}</h6>
-                        <span>{{ category.book_count }} Books</span>
-                    </div>
-                </a>
+            {% for subcategory in subCategories %}
+            <div class="col-lg-4 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+
+                <div class="rounded p-4">
+                    <h5 class="cat-item d-block bg-light text-center rounded p-3">Best Books on {{ subcategory.name }}
+                    </h5>
+                    {% for books in books_list|index:forloop.counter0 %}
+                    <span>
+                        <a class="cat-item d-block text-center rounded p-3"
+                            href="{% url 'book-detail' books.name_slug %}">
+                            {{ books.name }}
+                        </a>
+                    </span>
+                    <br>
+                    {% endfor %}
+                </div>
+
             </div>
             {% endfor %}
+            <br>
+        </div>
+
+        <div class="row g-4">
+            {% if books_list|length > subCategories|length %}
+            <div class="wow fadeInUp">
+                <h5 class="cat-item d-block bg-light text-center rounded p-3">
+                    Best Remaining books on {{ category.name}} Category
+                </h5>
+
+                <div class="row-lg-4 row-sm-6 wow fadeInUp">
+                    {% for books in books_list|remaining:subCategories %}
+                    <span>
+                        <a class="cat-item d-block text-center rounded p-3"
+                            href="{% url 'book-detail' books.name_slug %}">
+                            {{ books.name }}
+                        </a>
+                    </span>
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -405,7 +405,6 @@ def create_json_for_categories(categories):
     website_json = create_json_for_readrecommed()
     breadcumb_list = []
     for i in range(0, len(categories)):
-        print(categories[i])
         breadcumb_list.append(create_json_for_category(categories[i], i))
     json_breadcumb = {
         "@type": "BreadcrumbList",
@@ -426,6 +425,20 @@ def create_json_for_categories(categories):
 
     return json
 
+def create_json_for_subcategories(category):
+    website_json = create_json_for_readrecommed()
+
+    json = {
+        "@context": "https://schema.org/",
+        "@type": "WebPage",
+        "breadcrumb": "Home > Categories > Best Books on " + category.name,
+        "url": "readrecommend.com" + str(reverse('sub-categories', args=[category.name_slug])),
+        "@graph": [website_json],
+        "name":  "Literary Universe Unveiled: Best Books on " + category.name,
+        "description": "Whether you're a fervent fiction enthusiast, a devoted non-fiction reader, or an eclectic explorer of literary landscapes, these categories are your compass to navigate the boundless expanse of literature. Embark on a voyage of discovery, as you delve into worlds both familiar and uncharted, guided by the threads of human creativity and storytelling brilliance."
+    }
+
+    return json
 
 def create_json_for_readrecommed():
     json = {

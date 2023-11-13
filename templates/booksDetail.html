@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="mb-4">{{book.name | lower | title}} Book</h1>
+                <h2 class="mb-4">{{book.name | lower | title}} Book</h2>
                 <a href="{% url 'author-detail'  book.author_name.name_slug %}" class="text-center">
                     <div class="d-flex align-items-center">
                         {% if book.author_name.image %}

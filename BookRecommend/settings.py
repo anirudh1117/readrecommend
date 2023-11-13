@@ -26,10 +26,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://*.readrecommend.com',
-                 'readrecommend.com', 'www.readrecommend.com', '172.31.42.63','13.49.6.79']
-CSRF_TRUSTED_ORIGINS = ['https://*.readrecommend.com','https://readrecommend.com', 'https://www.readrecommend.com', 'https://172.31.42.63','https://13.49.6.79']
-#ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ['https://*.readrecommend.com',
+#                 'readrecommend.com', 'www.readrecommend.com', '172.31.42.63','13.49.6.79']
+#CSRF_TRUSTED_ORIGINS = ['https://*.readrecommend.com','https://readrecommend.com', 'https://www.readrecommend.com', 'https://172.31.42.63','https://13.49.6.79']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -85,23 +85,23 @@ WSGI_APPLICATION = 'BookRecommend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USERNAME'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': '127.0.0.1',
-    }
-}
-
-
 #DATABASES = {
-#   'default': {
-#       'ENGINE': 'django.db.backends.sqlite3',
-#       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#  }
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': config('DB_NAME'),
+#        'USER': config('DB_USERNAME'),
+#        'PASSWORD': config('DB_PASSWORD'),
+#        'HOST': '127.0.0.1',
+#    }
 #}
+
+
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+  }
+}
 
 
 # Password validation
@@ -153,8 +153,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#SITE_ID = 3
-SITE_ID = 4
+SITE_ID = 3
+#SITE_ID = 4
 
 LOGGING = {
     'version': 1,

@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
-from .sitempas import StaticSitemap, celebritySitemap, bookSitemap, authorSitemap, seriesSitemap
+from .sitempas import StaticSitemap, celebritySitemap, bookSitemap, authorSitemap, seriesSitemap, subCategoriesSitemap
 
 dynamic = {
     'celebrity': celebritySitemap,
@@ -14,7 +14,8 @@ sitemaps = {'static': StaticSitemap,
             'celebrity': celebritySitemap,
             'book': bookSitemap,
             'author': authorSitemap,
-            'series' : seriesSitemap
+            'series' : seriesSitemap,
+            'subcategories' : subCategoriesSitemap
         }
 urlpatterns = [
     path('admin-secrets@readrecommend/', admin.site.urls),

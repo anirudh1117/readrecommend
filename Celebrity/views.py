@@ -81,7 +81,7 @@ def peopleDetail(request, name):
     description = "Books recommended by "+ cs.name +"( " + str(len(bookrecoms)) + " Books ), and thousands of other book recommendations from the world’s top entrepreneurs, athlete ,investors, thinkers."
 
     keywords = 'read recommend'
-    keywords = keywords + ', books recommend by' + cs.name
+    keywords = keywords + ', books recommend by ' + cs.name
    
     json_detail = create_json_for_celebrity_Detail(cs, platform, books)
 

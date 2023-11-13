@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="mb-4">{{series.name | lower | title}} in Order</h1>
+                <h2 class="mb-4">{{series.name | lower | title}} in Order</h2>
                 <a href="{% url 'author-detail'  series.author_name.name_slug %}" class="text-center">
                     <div class="d-flex align-items-center">
                         {% if series.author_name.image %}
